@@ -12,6 +12,8 @@ strategy:
 pool: 
   vmImage: $(imageName)
 
+timeoutInMinutes: 180
+
 steps:
 - pwsh: ./Build-Llvm.ps1
   displayName: 'Run Build-Llvm.ps1 script'
