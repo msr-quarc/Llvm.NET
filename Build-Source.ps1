@@ -22,6 +22,8 @@ try
 
     .\Build-Llvm.ps1
 
+    .\Move-LlvmBuild.ps1
+
     .\Build-Interop.ps1
 
     .\Build-DotNet.ps1
