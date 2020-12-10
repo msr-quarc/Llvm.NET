@@ -14,5 +14,5 @@ jobs:
   timeoutInMinutes: 180
 
   steps:
-  - pwsh: ./Build-Llvm.ps1
-    displayName: 'Run Build-Llvm.ps1 script'
+  - pwsh: ./Build-Source.ps1
+    displayName: 'Run Build-Source.ps1 script'
