@@ -386,15 +386,8 @@ function Invoke-MSBuild([string]$project, [hashtable]$properties, $targets, $log
         $msbuildArgs += @( "/p:$(ConvertTo-PropertyList $properties)" )
     }
 
-    Write-Information "msbuild $($msbuildArgs -join ' ')"
-    if ($IsLinux)
-    {
-        dotnet msbuild $msbuildArgs
-    }
-    else
-    {
-        msbuild $msbuildArgs        
-    }
+    Write-Information "dotnet msbuild $($msbuildArgs -join ' ')"
+    dotnet msbuild $msbuildArgs
     if($LASTEXITCODE -ne 0)
     {
         Write-Error "Error running msbuild: $LASTEXITCODE"
