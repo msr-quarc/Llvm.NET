@@ -198,15 +198,15 @@ function global:Invoke-CMakeGenerate( [CMakeConfig]$config )
 
         if($p.ExitCode -ne 0 )
         {
-            Write-Information "CMake generation exited with code: $($p.ExitCode)"
+            throw "CMake generation exited with code: $($p.ExitCode)"
         }
     }
     finally
     {
         $timer.Stop()
+        Write-Information "Generation Time: $($timer.Elapsed.ToString())"
         popd
     }
-    Write-Information "Generation Time: $($timer.Elapsed.ToString())"
 }
 
 function global:Invoke-CMakeBuild([CMakeConfig]$config)
@@ -223,16 +223,19 @@ function global:Invoke-CMakeBuild([CMakeConfig]$config)
         $cmakeArgs += "--parallel"
     }
 
-    Write-Information "cmake $([string]::Join(' ', $cmakeArgs))"
-    $p = Start-Process -ErrorAction Continue -NoNewWindow -Wait -FilePath $cmakePath -ArgumentList $cmakeArgs -PassThru
+    try {
+        Write-Information "cmake $([string]::Join(' ', $cmakeArgs))"
+        $p = Start-Process -ErrorAction Continue -NoNewWindow -Wait -FilePath $cmakePath -ArgumentList $cmakeArgs -PassThru
 
-    if($p.ExitCode -ne 0 )
-    {
-        Write-Information "CMake build exited with code: $($p.ExitCode)"
+        if($p.ExitCode -ne 0 )
+        {
+            throw "CMake build exited with code: $($p.ExitCode)"
+        }
     }
-
-    $timer.Stop()
-    Write-Information "Build Time: $($timer.Elapsed.ToString())"
+    finally {
+        $timer.Stop()
+        Write-Information "Build Time: $($timer.Elapsed.ToString())"
+    }
 }
 
 function New-CMakeSettings( [Parameter(Mandatory, ValueFromPipeline)][CMakeConfig] $configuration )
