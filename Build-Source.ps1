@@ -32,7 +32,8 @@ try
 }
 catch
 {
-    Write-Error $_.Exception.Message
+    Write-Host "##vso[task.logissue type=warning;]Build-Source.ps1 failed: $($_.Exception.Message)"
+    Write-Error "Build-Source.ps1 failed: $($_.Exception.Message)"
 }
 finally
 {
