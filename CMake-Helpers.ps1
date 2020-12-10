@@ -220,7 +220,9 @@ function global:Invoke-CMakeBuild([CMakeConfig]$config)
     $plat = Get-Platform
     if ($plat -ne [Platform]::Windows)
     {
-        $cmakeArgs += "--parallel"
+        # `--jobs` with no arguments specifies that the underlying make invocation can run any
+        # number of parallel jobs.
+        $cmakeArgs += "--jobs"
     }
 
     try {
