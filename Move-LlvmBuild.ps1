@@ -60,8 +60,10 @@ Write-Information "Moving LLVM build outputs to the expected location"
 
 $destBase = (Join-Path $PSScriptRoot "llvm")
 
-Write-Verbose "Cleaning out the old data from $($destbase)"
-Remove-Item -Path $destbase -Recurse -Force | Out-Null
+if (Test-Path $destBase) {
+    Write-Verbose "Cleaning out the old data from $($destbase)"
+    Remove-Item -Path $destbase -Recurse -Force | Out-Null
+}
 
 # It seems that the build output, at least on Windows, always winds up in "Debug". I'm not sure why.
 $libSource = (Join-Path ($BuildRoot) ($BuildName) "Debug" "lib")
