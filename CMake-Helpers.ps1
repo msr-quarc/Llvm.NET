@@ -189,16 +189,12 @@ function global:Invoke-CMakeGenerate( [CMakeConfig]$config )
     pushd $config.BuildRoot
     try
     {
-        # need to use start-process as CMAKE scripts may write to STDERR and PsCore considers that an error
-        # using start-process allows forcing the error handling to ignore (Continue) such cases consistently
-        # between PS variants and versions. Since start-process doesn't set $LASTEXITCODE in the normal way,
-        # we need to check the exit code on the process object explicitly.
-        Write-Information "starting process: cmake $cmakeArgs"
-        $p = Start-Process -ErrorAction Continue -NoNewWindow -Wait -FilePath $cmakePath -ArgumentList $cmakeArgs -PassThru
+        Write-Information "running: cmake $cmakeArgs"
+        . $cmakePath @cmakeArgs
 
-        if($p.ExitCode -ne 0 )
+        if($LASTEXITCODE -ne 0 )
         {
-            throw "CMake generation exited with code: $($p.ExitCode)"
+            throw "CMake generation exited with code: $LASTEXITCODE"
         }
     }
     finally
@@ -215,27 +211,15 @@ function global:Invoke-CMakeBuild([CMakeConfig]$config)
     Write-Information "CMake Building $($config.Name)"
     $cmakePath = Find-OnPath 'cmake'
 
-    $cmakeArgs = @()
-
-    foreach( $param in $config.CMakeCommandArgs )
-    {
-        $cmakeArgs += $param
-    }
-
-    foreach( $param in $config.GenerateCommandArgs )
-    {
-        $cmakeArgs += $param
-    }
-
-    $cmakeArgs += "--build $($config.BuildRoot) -- $($config.BuildCommandArgs)"
+    $cmakeArgs = @('--build', "$($config.BuildRoot)", '--', "$($config.BuildCommandArgs)")
 
     try {
-        Write-Information "cmake $([string]::Join(' ', $cmakeArgs))"
-        $p = Start-Process -ErrorAction Continue -NoNewWindow -Wait -FilePath $cmakePath -ArgumentList $cmakeArgs -PassThru
+        Write-Information "running: cmake $([string]::Join(' ', $cmakeArgs))"
+        . $cmakePath @cmakeArgs
 
-        if($p.ExitCode -ne 0 )
+        if($LASTEXITCODE -ne 0 )
         {
-            throw "CMake build exited with code: $($p.ExitCode)"
+            throw "CMake build exited with code: $LASTEXITCODE"
         }
     }
     finally {
