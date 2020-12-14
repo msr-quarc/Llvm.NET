@@ -215,15 +215,19 @@ function global:Invoke-CMakeBuild([CMakeConfig]$config)
     Write-Information "CMake Building $($config.Name)"
     $cmakePath = Find-OnPath 'cmake'
 
-    $cmakeArgs = @('--build', "$($config.BuildRoot)", '--', "$($config.BuildCommandArgs)")
+    $cmakeArgs = @()
 
-    $plat = Get-Platform
-    if ($plat -ne [Platform]::Windows)
+    foreach( $param in $config.CMakeCommandArgs )
     {
-        # `--jobs` with no arguments specifies that the underlying make invocation can run any
-        # number of parallel jobs.
-        $cmakeArgs += "--jobs"
+        $cmakeArgs += $param
     }
+
+    foreach( $param in $config.GenerateCommandArgs )
+    {
+        $cmakeArgs += $param
+    }
+
+    $cmakeArgs += "--build $($config.BuildRoot) -- $($config.BuildCommandArgs)"
 
     try {
         Write-Information "cmake $([string]::Join(' ', $cmakeArgs))"

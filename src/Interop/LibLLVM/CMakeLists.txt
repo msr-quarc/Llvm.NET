@@ -11,6 +11,8 @@ message("Host system processor is " ${CMAKE_HOST_SYSTEM_PROCESSOR})
 message("C++ compiler is " ${CMAKE_CXX_COMPILER})
 message("C++ compiler ID is " ${CMAKE_CXX_COMPILER_ID})
 
+message(INFO "*** build config: ${CMAKE_BUILD_TYPE}")
+
 set(CMAKE_VERBOSE_MAKEFILE TRUE)
 set(LLVM_VERSION_STRING "10.0.0")
 set(LLVM_VERSION_MAJOR "10")
