@@ -211,7 +211,7 @@ function global:Invoke-CMakeBuild([CMakeConfig]$config)
     Write-Information "CMake Building $($config.Name)"
     $cmakePath = Find-OnPath 'cmake'
 
-    $cmakeArgs = @('--build', "$($config.BuildRoot)", '--', "$($config.BuildCommandArgs)")
+    $cmakeArgs = @('--build', "$($config.BuildRoot)", '--config', "$($config.ConfigurationType)", '--', "$($config.BuildCommandArgs)")
 
     try {
         Write-Information "running: cmake $([string]::Join(' ', $cmakeArgs))"
