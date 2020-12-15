@@ -296,7 +296,7 @@ function Find-VSInstance([switch]$PreRelease, $Version = '[15.0, 17.0)', [string
     
         Write-Debug "Looking for VS"
         $vs = Get-VsSetupInstance -Prerelease:$PreRelease |
-                Select-VsSetupInstance -Version $Version -Require $requiredComponents |
+                Select-VsSetupInstance -Product * -Version $Version -Require $requiredComponents |
                 select -First 1
         Write-Debug "Found $($vs)"
         return $vs
