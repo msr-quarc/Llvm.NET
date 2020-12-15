@@ -32,7 +32,7 @@ class CMakeConfig
         }
         else 
         {
-            $VsInstance = Find-VSInstance -Prerelease:$false
+            $VsInstance = $false # Find-VSInstance -Prerelease:$false
             if (!$VsInstance)
             {
                 Write-Information "On Windows, no Visual Studio found"
