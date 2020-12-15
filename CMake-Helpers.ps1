@@ -167,6 +167,7 @@ function global:Invoke-CMakeGenerate( [CMakeConfig]$config )
     # Construct full set of args from fixed options and configuration variables
     $cmakeArgs = @()
     $cmakeArgs += "-G`"$($config.Generator)`""
+    $cmakeArgs += "--config", $config.ConfigurationType
     foreach( $param in $config.CMakeCommandArgs )
     {
         $cmakeArgs += $param
