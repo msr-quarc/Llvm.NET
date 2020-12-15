@@ -32,7 +32,7 @@ class CMakeConfig
         }
         else 
         {
-            $VsInstance = $false # Find-VSInstance -Prerelease:$false
+            $VsInstance = Find-VSInstance -Prerelease:$false
             if (!$VsInstance)
             {
                 Write-Information "On Windows, no Visual Studio found"
@@ -70,23 +70,23 @@ class CMakeConfig
         {
             if( $this.Platform -eq "x64" )
             {
-                $this.CMakeCommandArgs.Add('-A x64')
+                $this.CMakeCommandArgs += '-A', 'x64'
             }
     
             if([Environment]::Is64BitOperatingSystem)
             {
-                $this.CMakeCommandArgs.Add('-Thost=x64')
-                $this.InheritEnvironments.Add('msvc_x64_x64')
+                $this.CMakeCommandArgs += '-Thost=x64'
+                $this.InheritEnvironments += 'msvc_x64_x64'
             }
             else
             {
-                $this.InheritEnvironments.Add('msvc_x64')
+                $this.InheritEnvironments += 'msvc_x64'
             }
 
-            $this.BuildCommandArgs.Add('/m')
-            $this.GenerateCommandArgs.Add("--config " + $this.ConfigurationType)
+            $this.BuildCommandArgs += '/m'
         }
 
+        $this.GenerateCommandArgs += "--config", $this.ConfigurationType
         $this.CMakeBuildVariables = @{}
     }
 
@@ -167,7 +167,6 @@ function global:Invoke-CMakeGenerate( [CMakeConfig]$config )
     # Construct full set of args from fixed options and configuration variables
     $cmakeArgs = @()
     $cmakeArgs += "-G`"$($config.Generator)`""
-    $cmakeArgs += "--config", $config.ConfigurationType
     foreach( $param in $config.CMakeCommandArgs )
     {
         $cmakeArgs += $param
@@ -190,7 +189,7 @@ function global:Invoke-CMakeGenerate( [CMakeConfig]$config )
     pushd $config.BuildRoot
     try
     {
-        Write-Information "running: cmake $cmakeArgs"
+        Write-Information "running: $cmakePath $cmakeArgs"
         . $cmakePath @cmakeArgs
 
         if($LASTEXITCODE -ne 0 )
@@ -215,7 +214,7 @@ function global:Invoke-CMakeBuild([CMakeConfig]$config)
     $cmakeArgs = @('--build', "$($config.BuildRoot)", '--config', "$($config.ConfigurationType)", '--', "$($config.BuildCommandArgs)")
 
     try {
-        Write-Information "running: cmake $([string]::Join(' ', $cmakeArgs))"
+        Write-Information "running: $cmakePath $cmakeArgs"
         . $cmakePath @cmakeArgs
 
         if($LASTEXITCODE -ne 0 )
