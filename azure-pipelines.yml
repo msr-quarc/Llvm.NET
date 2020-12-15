@@ -11,7 +11,7 @@ jobs:
   pool: 
     vmImage: $(imageName)
 
-  timeoutInMinutes: 180
+  timeoutInMinutes: 240
 
   steps:
   - pwsh: ./Build-Llvm.ps1

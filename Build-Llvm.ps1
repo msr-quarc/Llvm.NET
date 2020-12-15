@@ -68,6 +68,11 @@ try
 {
     . .\buildutils.ps1
 
+    $plat = Get-Platform
+    if ($plat -eq [Platform]::Windows) {
+        .\Repair-WinBuild.ps1
+    }
+
     cd llvm-project\llvm
     Invoke-Build 
 }
