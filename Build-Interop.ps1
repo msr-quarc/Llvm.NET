@@ -95,6 +95,7 @@ try
 }
 catch
 {
+    Write-Host "##vso[task.logissue type=error;]$($_.Exception.Message)"
     Write-Error $_.Exception.Message
 }
 finally
