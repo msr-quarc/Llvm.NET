@@ -58,45 +58,61 @@ function Move-Tree ([string]$source, [string]$dest, [string[]]$filter = @("*"), 
 
 Write-Information "Moving LLVM build outputs to the expected location"
 
-$destBase = (Join-Path $PSScriptRoot "llvm")
+Push-Location $PSScriptRoot
+$oldPath = $env:Path
 
-if (Test-Path $destBase) {
-    Write-Verbose "Cleaning out the old data from $($destbase)"
-    Remove-Item -Path $destbase -Recurse -Force | Out-Null
+try {
+    . .\buildutils.ps1
+
+    $destBase = (Join-Path $PSScriptRoot "llvm")
+
+    if (Test-Path $destBase) {
+        Write-Verbose "Cleaning out the old data from $($destbase)"
+        Remove-Item -Path $destbase -Recurse -Force | Out-Null
+    }
+
+    $sourceConfiguration = $Configuration
+    if ($sourceConfiguration = "Release") {
+        $sourceConfiguration = "RelWithDebInfo"
+    }
+
+    $plat = Get-Platform
+    if ($plat -eq [Platform]::Windows) {
+        $libSource = (Join-Path ($BuildRoot) ($BuildName) $sourceConfiguration "lib")
+    } else {
+        $libSource = (Join-Path ($BuildRoot) ($BuildName) "lib")
+    }
+    $libDest = (Join-Path ($destBase) ($BuildName) ($Configuration) "lib")
+    Write-Verbose "Moving built libraries from $($libSource) to $($libDest)"
+    Move-Tree $libSource $libDest 
+
+    $incSource = (Join-Path ($BuildRoot) ($BuildName) "include")
+    $incDest = (Join-Path ($destbase) ($BuildName) "include")
+    $incFilter = @( '*.h', '*.gen', '*.def', '*.inc' )
+    Write-Verbose "Moving headers from $($incSource) to $($incDest)"
+    Move-Tree $incSource $incDest ($incFilter)
+
+    $inc2Source = (Join-Path (Split-Path $BuildRoot -Parent) "include")
+    $inc2Dest = (Join-Path ($destbase) "include")
+    $inc2Exclude = @( '*.txt')
+    Write-Verbose "Moving headers from $($inc2Source) to $($inc2Dest)"
+    Copy-Tree $inc2Source $inc2Dest -exclude ($inc2Exclude)
+
+    $cfgSource = (Join-Path $BuildRoot ($BuildName) "NATIVE" "include" "llvm" "Config")
+    $cfgDest = (Join-Path ($destbase) "include" "llvm" "Config")
+    Write-Verbose "Moving config headers from $($cfgSource) to $($cfgDest)"
+    Copy-Tree $cfgSource $cfgDest
+
+    Write-Verbose "Copying OrcCBindingsStack.h"
+    $orcSource = (Join-Path $PSScriptRoot "llvm-project" "llvm" "lib" "ExecutionEngine" "Orc" "OrcCBindingsStack.h")
+    $orcDest = (Join-Path ($destBase) "lib" "ExecutionEngine" "Orc")
+    if (!(Test-Path $orcDest))
+    {
+        Write-Verbose "Creating directory $($orcDest)"
+        New-Item -Path $orcDest -ItemType "directory" -Force
+    }
+    Copy-Item -Path $orcSource -Destination $orcDest -Force
+} finally {
+    Pop-Location
+    $env:Path = $oldPath
 }
-
-$sourceConfiguration = $Configuration
-if ($sourceConfiguration = "Release") {
-    $sourceConfiguration = "RelWithDebInfo"
-}
-$libSource = (Join-Path ($BuildRoot) ($BuildName) $sourceConfiguration "lib")
-$libDest = (Join-Path ($destBase) ($BuildName) ($Configuration) "lib")
-Write-Verbose "Moving built libraries from $($libSource) to $($libDest)"
-Move-Tree $libSource $libDest 
-
-$incSource = (Join-Path ($BuildRoot) ($BuildName) "include")
-$incDest = (Join-Path ($destbase) ($BuildName) "include")
-$incFilter = @( '*.h', '*.gen', '*.def', '*.inc' )
-Write-Verbose "Moving headers from $($incSource) to $($incDest)"
-Move-Tree $incSource $incDest ($incFilter)
-
-$inc2Source = (Join-Path (Split-Path $BuildRoot -Parent) "include")
-$inc2Dest = (Join-Path ($destbase) "include")
-$inc2Exclude = @( '*.txt')
-Write-Verbose "Moving headers from $($inc2Source) to $($inc2Dest)"
-Copy-Tree $inc2Source $inc2Dest -exclude ($inc2Exclude)
-
-$cfgSource = (Join-Path $BuildRoot ($BuildName) "NATIVE" "include" "llvm" "Config")
-$cfgDest = (Join-Path ($destbase) "include" "llvm" "Config")
-Write-Verbose "Moving config headers from $($cfgSource) to $($cfgDest)"
-Copy-Tree $cfgSource $cfgDest
-
-Write-Verbose "Copying OrcCBindingsStack.h"
-$orcSource = (Join-Path $PSScriptRoot "llvm-project" "llvm" "lib" "ExecutionEngine" "Orc" "OrcCBindingsStack.h")
-$orcDest = (Join-Path ($destBase) "lib" "ExecutionEngine" "Orc")
-if (!(Test-Path $orcDest))
-{
-    Write-Verbose "Creating directory $($orcDest)"
-    New-Item -Path $orcDest -ItemType "directory" -Force
-}
-Copy-Item -Path $orcSource -Destination $orcDest -Force
