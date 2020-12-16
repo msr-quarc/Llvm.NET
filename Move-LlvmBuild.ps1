@@ -65,8 +65,11 @@ if (Test-Path $destBase) {
     Remove-Item -Path $destbase -Recurse -Force | Out-Null
 }
 
-# It seems that the build output, at least on Windows, always winds up in "Debug". I'm not sure why.
-$libSource = (Join-Path ($BuildRoot) ($BuildName) "Debug" "lib")
+$sourceConfiguration = $Configuration
+if ($sourceConfiguration = "Release") {
+    $sourceConfiguration = "RelWithDebInfo"
+}
+$libSource = (Join-Path ($BuildRoot) ($BuildName) $sourceConfiguration "lib")
 $libDest = (Join-Path ($destBase) ($BuildName) ($Configuration) "lib")
 Write-Verbose "Moving built libraries from $($libSource) to $($libDest)"
 Move-Tree $libSource $libDest 
