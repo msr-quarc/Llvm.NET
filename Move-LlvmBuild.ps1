@@ -70,6 +70,8 @@ if ($sourceConfiguration = "Release") {
     $sourceConfiguration = "RelWithDebInfo"
 }
 
+ls (Join-Path ($BuildRoot) ($BuildName))
+
 $libSource = (Join-Path ($BuildRoot) ($BuildName) $sourceConfiguration "lib")
 $libDest = (Join-Path ($destBase) ($BuildName) ($Configuration) "lib")
 Write-Verbose "Moving built libraries from $($libSource) to $($libDest)"
