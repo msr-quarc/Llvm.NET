@@ -58,6 +58,8 @@ function Move-Tree ([string]$source, [string]$dest, [string[]]$filter = @("*"), 
 
 Write-Information "Moving LLVM build outputs to the expected location"
 
+. $PSScriptRoot\buildutils.ps1
+
 $destBase = (Join-Path $PSScriptRoot "llvm")
 
 if (Test-Path $destBase) {
@@ -66,13 +68,15 @@ if (Test-Path $destBase) {
 }
 
 $sourceConfiguration = $Configuration
-if ($sourceConfiguration = "Release") {
+$platform = Get-Platform
+if ($platform -ne [platform]::Windows) {
+    $sourceConfiguration = "bin"
+} elseif ($sourceConfiguration = "Release") {
     $sourceConfiguration = "RelWithDebInfo"
 }
 
-ls (Join-Path ($BuildRoot) ($BuildName))
 
-$libSource = (Join-Path ($BuildRoot) ($BuildName) $sourceConfiguration "lib")
+$libSource = (Join-Path ($BuildRoot) ($BuildName) ($sourceConfiguration) "lib")
 $libDest = (Join-Path ($destBase) ($BuildName) ($Configuration) "lib")
 Write-Verbose "Moving built libraries from $($libSource) to $($libDest)"
 Move-Tree $libSource $libDest 
@@ -103,3 +107,8 @@ if (!(Test-Path $orcDest))
     New-Item -Path $orcDest -ItemType "directory" -Force
 }
 Copy-Item -Path $orcSource -Destination $orcDest -Force
+
+Write-Verbose "Copying Llvm-Libs props and targets"
+$llvmLibsProps = (Join-Path $PSScriptRoot "Llvm-Libs.props")
+$llvmLibsTargets = (Join-Path $PSScriptRoot "Llvm-Libs.targets")
+Copy-Item -Path $llvmLibsProps,$llvmLibsTargets -Destination $destBase
