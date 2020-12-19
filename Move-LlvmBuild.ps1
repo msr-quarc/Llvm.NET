@@ -110,5 +110,4 @@ Copy-Item -Path $orcSource -Destination $orcDest -Force
 
 Write-Verbose "Copying Llvm-Libs props and targets"
 $llvmLibsProps = (Join-Path $PSScriptRoot "Llvm-Libs.props")
-$llvmLibsTargets = (Join-Path $PSScriptRoot "Llvm-Libs.targets")
-Copy-Item -Path $llvmLibsProps,$llvmLibsTargets -Destination $destBase
+Copy-Item -Path $llvmLibsProps -Destination $destBase -Force

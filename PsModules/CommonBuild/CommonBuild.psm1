@@ -235,25 +235,26 @@ function Invoke-NuGet
     Invokes NuGet with any arguments provided
 
 .DESCRIPTION
-    This will attempt to find Nuget.exe on the current path, and if not found will download the latest
+    This will attempt to find Nuget on the current path, and if not found will download the latest
     version from NuGet.org before running the command.
 #>
     $buildPaths = Get-DefaultBuildPaths ([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..')))
-    $NuGetPaths = Find-OnPath NuGet.exe -ErrorAction Continue
+    $NuGetPaths = Find-OnPath NuGet -ErrorAction Continue
     if( !$NuGetPaths )
     {
-        $nugetToolsPath = Join-Path $buildPaths['ToolsPath'] 'NuGet.exe'
+        $nugetToolsPath = Join-Path $buildPaths['ToolsPath'] 'NuGet'
         if( !(Test-Path $nugetToolsPath))
         {
             # Download it from official NuGet release location
-            Write-Verbose "Downloading Nuget.exe to $nugetToolsPath"
+            Write-Verbose "Downloading Nuget to $nugetToolsPath"
+            # ToDo: Need a path to Unix Nuget...
             Invoke-WebRequest -UseBasicParsing -Uri https://dist.NuGet.org/win-x86-commandline/latest/NuGet.exe -OutFile $nugetToolsPath
         }
 
         $env:Path = "$env:Path;$($buildPaths['ToolsPath'])"
     }
     Write-Information "NuGet $args"
-    NuGet.exe $args
+    NuGet $args
     $err = $LASTEXITCODE
     if($err -ne 0)
     {
@@ -317,7 +318,8 @@ function Find-MSBuild([switch]$AllowVsPreReleases)
     {
         Write-Debug "On Linux or Mac, using dotnet msbuild"
         $versionInfo = & dotnet msbuild -version
-        return @{ FullPath="dotnet msbuild"
+        return @{ FullPath="dotnet"
+                  AdditionalArgs="msbuild"
                   FoundOnPath=$true
                   Version = $versionInfo[-1]
                 }
@@ -333,11 +335,11 @@ function Find-MSBuild([switch]$AllowVsPreReleases)
             throw "MSBuild not found on PATH and No instances of VS found to use"
         }
 
-        Write-Debug "VS installation found: $($vsInstall | Format-List | Out-String)"
+        Write-Verbose "VS installation found: $($vsInstall | Format-List | Out-String)"
         $msBuildPath = [System.IO.Path]::Combine( $vsInstall.InstallationPath, 'MSBuild', '15.0', 'bin', 'MSBuild.exe')
         if(!(Test-Path -PathType Leaf $msBuildPath))
         {
-            $msBuildPath = [System.IO.Path]::Combine( $vsInstall.InstallationPath, 'MSBuild', 'current', 'bin', 'MSBuild.exe')
+            $msBuildPath = [System.IO.Path]::Combine( $vsInstall.InstallationPath, 'MSBuild', 'Current', 'Bin', 'MSBuild.exe')
         }
 
         $foundOnPath = $false
@@ -345,8 +347,7 @@ function Find-MSBuild([switch]$AllowVsPreReleases)
 
     if( !(Test-Path -PathType Leaf $msBuildPath ) )
     {
-        Write-Debug 'MSBuild not found'
-        return $null
+        throw 'MSBuild not found'
     }
 
     Write-Verbose "MSBuild Found at: $msBuildPath"
@@ -386,15 +387,10 @@ function Invoke-MSBuild([string]$project, [hashtable]$properties, $targets, $log
         $msbuildArgs += @( "/p:$(ConvertTo-PropertyList $properties)" )
     }
 
-    Write-Information "msbuild $($msbuildArgs -join ' ')"
-    # if ($IsLinux)
-    # {
-        dotnet msbuild $msbuildArgs
-    # }
-    # else
-    # {
-    #     msbuild $msbuildArgs        
-    # }
+    $msbuild = Find-MSBuild -AllowVsPreReleases
+    $msbuildArgs = $msbuild.AdditionalArgs + $msbuildArgs
+    Write-Information "$($msbuild.FullPath) $($msbuildArgs -join ' ')"
+    . $msbuild.FullPath @msbuildArgs
     if($LASTEXITCODE -ne 0)
     {
         Write-Error "Error running msbuild: $LASTEXITCODE"
