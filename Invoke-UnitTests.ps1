@@ -5,6 +5,11 @@ try
 
     $testsFailed = $false
 
+    $plat = Get-Platform
+    if ($plat -ne [platform]::Windows) {
+        return
+    }
+
     Write-Information 'Running Interop tests as x64'
     $testsFailed = $testsFailed -or (Invoke-DotNetTest $buildInfo 'src\Interop\InteropTests\InteropTests.csproj')
 
@@ -33,6 +38,7 @@ try
 }
 catch
 {
+    Write-Host "##vso[task.logissue type=error;]Invoke-UnitTests.ps1 failed: $($_.Exception.Message)"
     Write-Error $_.Exception.Message
 }
 

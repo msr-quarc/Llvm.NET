@@ -16,3 +16,5 @@ jobs:
   steps:
   - pwsh: ./Build-Source.ps1
     displayName: 'Run Build-Source.ps1 script'
+  - pwsh: ./Invoke-UnitTests.ps1
+    displayName: 'Run Invoke-UnitTests.ps1 script'
