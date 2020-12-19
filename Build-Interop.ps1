@@ -65,6 +65,8 @@ try
     # as CppSharp NuGet package is basically hostile to the newer SDK project format.
     Invoke-MSBuild -Targets 'Restore;Build' -Project 'src\Interop\LlvmBindingsGenerator\LlvmBindingsGenerator.csproj' -Properties $msBuildProperties -LoggerArgs ($buildInfo['MsBuildLoggerArgs'] + @("/bl:$generatorBuildLogPath"))
 
+    .\Repair-intrin.ps1
+
     # At present CppSharp only supports the "desktop" framework, so limiting this to net47 for now
     # Hopefully they will support .NET Core soon, if not, the generation stage may need to move out
     # to a manual step with the results checked in.
