@@ -319,7 +319,7 @@ function Find-MSBuild([switch]$AllowVsPreReleases)
         Write-Debug "On Linux or Mac, using dotnet msbuild"
         $versionInfo = & dotnet msbuild -version
         return @{ FullPath="dotnet"
-                  AdditionalArgs="msbuild"
+                  AdditionalArgs=@("msbuild")
                   FoundOnPath=$true
                   Version = $versionInfo[-1]
                 }

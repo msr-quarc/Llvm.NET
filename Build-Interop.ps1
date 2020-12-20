@@ -71,7 +71,7 @@ try
     # Hopefully they will support .NET Core soon, if not, the generation stage may need to move out
     # to a manual step with the results checked in.
     Write-Information "Generating P/Invoke Bindings"
-    & "$($buildInfo['BuildOutputPath'])\bin\LlvmBindingsGenerator\Release\net47\LlvmBindingsGenerator.exe" $buildInfo['LlvmLibsRoot'] (Join-Path $buildInfo['SrcRootPath'] 'Interop\LibLLVM') (Join-Path $buildInfo['SrcRootPath'] 'Interop\Ubiquity.NET.Llvm.Interop')
+    & "$($buildInfo['BuildOutputPath'])\bin\LlvmBindingsGenerator\Release\net48\LlvmBindingsGenerator.exe" $buildInfo['LlvmLibsRoot'] (Join-Path $buildInfo['SrcRootPath'] 'Interop\LibLLVM') (Join-Path $buildInfo['SrcRootPath'] 'Interop\Ubiquity.NET.Llvm.Interop')
     if($LASTEXITCODE -eq 0)
     {
         # now build the projects that consume generated output for the bindings

@@ -68,9 +68,11 @@ if (Test-Path $destBase) {
 }
 
 $sourceConfiguration = $Configuration
+$libIncFilter = @("*")
 $platform = Get-Platform
 if ($platform -ne [platform]::Windows) {
-    $sourceConfiguration = "bin"
+    $sourceConfiguration = ""
+    $libIncfilter = @("*.a")
 } elseif ($sourceConfiguration = "Release") {
     $sourceConfiguration = "RelWithDebInfo"
 }
@@ -79,7 +81,7 @@ if ($platform -ne [platform]::Windows) {
 $libSource = (Join-Path ($BuildRoot) ($BuildName) ($sourceConfiguration) "lib")
 $libDest = (Join-Path ($destBase) ($BuildName) ($Configuration) "lib")
 Write-Verbose "Moving built libraries from $($libSource) to $($libDest)"
-Move-Tree $libSource $libDest 
+Move-Tree $libSource $libDest ($libIncFilter)
 
 $incSource = (Join-Path ($BuildRoot) ($BuildName) "include")
 $incDest = (Join-Path ($destbase) ($BuildName) "include")
