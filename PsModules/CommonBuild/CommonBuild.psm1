@@ -239,26 +239,26 @@ function Invoke-NuGet
     version from NuGet.org before running the command.
 #>
     $buildPaths = Get-DefaultBuildPaths ([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..')))
-    $NuGetPaths = Find-OnPath NuGet -ErrorAction Continue
+    $NuGetPaths = Find-OnPath nuget -ErrorAction Continue
     if( !$NuGetPaths )
     {
-        $nugetToolsPath = Join-Path $buildPaths['ToolsPath'] 'NuGet'
+        $nugetToolsPath = Join-Path $buildPaths['ToolsPath'] 'nuget'
         if( !(Test-Path $nugetToolsPath))
         {
-            # Download it from official NuGet release location
-            Write-Verbose "Downloading Nuget to $nugetToolsPath"
-            # ToDo: Need a path to Unix Nuget...
+            # Download it from official nuget release location
+            Write-Verbose "Downloading nuget to $nugetToolsPath"
+            # ToDo: Need a path to Unix nuget...
             Invoke-WebRequest -UseBasicParsing -Uri https://dist.NuGet.org/win-x86-commandline/latest/NuGet.exe -OutFile $nugetToolsPath
         }
 
         $env:Path = "$env:Path;$($buildPaths['ToolsPath'])"
     }
-    Write-Information "NuGet $args"
-    NuGet $args
+    Write-Information "nuget $args"
+    nuget $args
     $err = $LASTEXITCODE
     if($err -ne 0)
     {
-        throw "Error running NuGet: $err"
+        throw "Error running nuget: $err"
     }
 }
 
