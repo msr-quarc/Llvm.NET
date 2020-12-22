@@ -34,7 +34,7 @@ This script is unfortunately necessary due to several factors:
      them.
 #>
 Param(
-    [string]$Configuration="RelWithDebInfo",
+    [string]$Configuration="Release",
     [switch]$AllowVsPreReleases,
     [switch]$NoClean
 )
