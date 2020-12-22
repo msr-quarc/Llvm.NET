@@ -1,3 +1,7 @@
+variables:
+  Drops.Dir: $(Build.ArtifactStagingDirectory)/drops
+  Drop.Native: $(System.DefaultWorkingDirectory)/xplat
+
 jobs:
 - job: Build
   strategy:
