@@ -1,40 +1,12 @@
-Param(
-    [string]$Configuration="Release",
-    [switch]$AllowVsPreReleases
-)
-
 Push-Location $PSScriptRoot
 $oldPath = $env:Path
 try
 {
-    . .\buildutils.ps1
-    $buildInfo = Initialize-BuildEnvironment
+    .\Build-Interop.ps1
 
-    $packProperties = @{ version=$($buildInfo['PackageVersion'])
-                         llvmversion=$($buildInfo['LlvmVersion'])
-                         buildbinoutput=(Join-path $($buildInfo['BuildOutputPath']) 'bin')
-                         configuration=$Configuration
-                       }
+    .\Build-DotNet.ps1
 
-    $msBuildProperties = @{ Configuration = $Configuration
-                            LlvmVersion = $buildInfo['LlvmVersion']
-                          }
-
-    .\Build-Llvm.ps1
-
-    .\Move-LlvmBuild.ps1
-
-    .\Build-LibLlvm.ps1
-
-    $plat = Get-Platform
-    if ($plat -eq [platform]::Windows) {
-
-        .\Build-Interop.ps1
-
-        .\Build-DotNet.ps1
-
-        .\Pack-NuGet.ps1
-    }
+    .\Pack-NuGet.ps1
 }
 catch
 {

@@ -23,14 +23,19 @@ try
 
     $target = "all"
     $plat = Get-Platform
+    $generator = "-G`"Unix Makefiles`""
     if ($plat -eq [platform]::Windows) {
         $target = "ALL_BUILD"
+        $generator = ""
     }
     Write-Information "Building LibLLVM"
     cd $buildOutputDir
-    $cmakePath = Find-OnPath 'cmake'
-    . $cmakePath (Resolve-Path ..)
-    . $cmakePath --build . --target $target --config $Configuration
+    cmake $generator (Resolve-Path ..)
+    if($LASTEXITCODE -ne 0 )
+    {
+        throw "LibLLVM CMake generate exited with code: $LASTEXITCODE"
+    }
+    cmake --build . --target $target --config $Configuration
     if($LASTEXITCODE -ne 0 )
     {
         throw "LibLLVM CMake build exited with code: $LASTEXITCODE"
@@ -38,16 +43,16 @@ try
     cd $PSScriptRoot
 
     if ($plat -eq [platform]::Windows) {
-        New-Item -ErrorAction SilentlyContinue -ItemType Container -Path (Join-Path $buildInfo["ArtifactDrops"] win-x64)
-        Move-Item -Force -Path (Join-Path $buildOutputDir $Configuration *) (Join-Path $buildInfo["ArtifactDrops"] win-x64)
+        New-Item -ErrorAction SilentlyContinue -ItemType Container -Path (Join-Path $buildInfo["NativeXplat"] win-x64)
+        Copy-Item -Force -Path (Join-Path $buildOutputDir $Configuration *) (Join-Path $buildInfo["NativeXplat"] win-x64)
     } elseif ($plat -eq [platform]::Linux) {
-        New-Item -ErrorAction SilentlyContinue -ItemType Container -Path (Join-Path $buildInfo["ArtifactDrops"] linux-x64)
+        New-Item -ErrorAction SilentlyContinue -ItemType Container -Path (Join-Path $buildInfo["NativeXplat"] linux-x64)
         ls $buildOutputDir
-        Move-Item -Force -Path (Join-Path $buildOutputDir libUbiquity.NET.LibLlvm.so) (Join-Path $buildInfo["ArtifactDrops"] linux-x64 Ubiquity.NET.LibLlvm.dll)
+        Copy-Item -Force -Path (Join-Path $buildOutputDir libUbiquity.NET.LibLlvm.so) (Join-Path $buildInfo["NativeXplat"] linux-x64 Ubiquity.NET.LibLlvm.dll)
     } else {
-        New-Item -ErrorAction SilentlyContinue -ItemType Container -Path (Join-Path $buildInfo["ArtifactDrops"] mac-x64)
+        New-Item -ErrorAction SilentlyContinue -ItemType Container -Path (Join-Path $buildInfo["NativeXplat"] osx-x64)
         ls $buildOutputDir
-        Move-Item -Force -Path (Join-Path $buildOutputDir libUbiquity.NET.LibLlvm.dynlib) (Join-Path $buildInfo["ArtifactDrops"] mac-x64 Ubiquity.NET.LibLlvm.dll)
+        Copy-Item -Force -Path (Join-Path $buildOutputDir libUbiquity.NET.LibLlvm.dynlib) (Join-Path $buildInfo["NativeXplat"] osx-x64 Ubiquity.NET.LibLlvm.dll)
     }
 }
 finally
