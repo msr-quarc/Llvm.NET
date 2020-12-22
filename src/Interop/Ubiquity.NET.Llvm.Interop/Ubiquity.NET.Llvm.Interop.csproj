@@ -22,21 +22,21 @@
     <PackageLicenseExpression>Apache-2.0 WITH LLVM-exception</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="..\..\..\xplat\win-x64\**\*">
-        <Link>runtimes\win-x64\native\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    <Content Include="..\..\..\xplat\win-x64\*">
+        <Link>runtimes\win-x64\native\%(FileName)%(Extension)</Link>
+        <PackagePath>runtimes\win-x64\native\%(FileName)%(Extension)</PackagePath>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        <Visible>false</Visible>
-    </None>
-    <None Include="..\..\..\xplat\osx-x64\**\*">
-        <Link>runtimes\osx-x64\native\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </Content>
+    <Content Include="..\..\..\xplat\osx-x64\*">
+        <Link>runtimes\osx-x64\native\%(FileName)%(Extension)</Link>
+        <PackagePath>runtimes\osx-x64\native\%(FileName)%(Extension)</PackagePath>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        <Visible>false</Visible>
-    </None>
-    <None Include="..\..\..\xplat\linux-x64\**\*">
-        <Link>runtimes\linux-x64\native\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </Content>
+    <Content Include="..\..\..\xplat\linux-x64\*">
+        <Link>runtimes\linux-x64\native\%(FileName)%(Extension)</Link>
+        <PackagePath>runtimes\linux-x64\native\%(FileName)%(Extension)</PackagePath>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        <Visible>false</Visible>
-    </None>
+    </Content>
     <Content Include="NugetPkg\build\Ubiquity.NET.Llvm.Interop.props">
         <PackagePath>build\Ubiquity.NET.Llvm.Interop.props</PackagePath>
     </Content>

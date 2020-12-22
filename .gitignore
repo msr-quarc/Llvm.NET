@@ -138,6 +138,7 @@ FakesAssemblies/
 #build output locations
 BuildOutput/
 IntermediateOutput/
+xplat/
 
 
 Tools/
