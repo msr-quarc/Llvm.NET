@@ -34,7 +34,7 @@ This script is unfortunately necessary due to several factors:
      them.
 #>
 Param(
-    [string]$Configuration="Release",
+    [string]$Configuration="RelWithDebInfo",
     [switch]$AllowVsPreReleases,
     [switch]$NoClean
 )
@@ -76,16 +76,6 @@ try
     {
         # now build the projects that consume generated output for the bindings
 
-        # Need to invoke NuGet directly for restore of vcxproj as /t:Restore target doesn't support packages.config
-        # and PackageReference isn't supported for native projects... [Sigh...]
-        Write-Information "Restoring LibLLVM"
-        Invoke-NuGet restore 'src\Interop\LibLLVM\LibLLVM.vcxproj'
-
-        Write-Information "Building LibLLVM"
-        $libLLVMBinLogPath = Join-Path $buildInfo['BinLogsPath'] LibLLVM-Build.binlog
-        Invoke-MSBuild -Targets 'Build' -Project 'src\Interop\LibLLVM\LibLLVM.vcxproj' -Properties $msBuildProperties -LoggerArgs ($buildInfo['MsBuildLoggerArgs'] + @("/bl:$libLLVMBinLogPath") )
-        # cmake --build src\Interop\LibLLVM --target ALL_BUILD --config Release
-
         Write-Information "Building Ubiquity.NET.Llvm.Interop"
         $interopSlnBinLog = Join-Path $buildInfo['BinLogsPath'] Interop.sln.binlog
         Invoke-MSBuild -Targets 'Restore;Build' -Project 'src\Interop\Interop.sln' -Properties $msBuildProperties -LoggerArgs ($buildInfo['MsBuildLoggerArgs'] + @("/bl:$interopSlnBinLog") )
@@ -94,11 +84,6 @@ try
     {
         Write-Error "Generating LLVM Bindings failed"
     }
-}
-catch
-{
-    Write-Host "##vso[task.logissue type=error;]$($_.Exception.Message)"
-    Write-Error $_.Exception.Message
 }
 finally
 {

@@ -24,6 +24,8 @@ try
 
     .\Move-LlvmBuild.ps1
 
+    .\Build-LibLlvm.ps1
+
     $plat = Get-Platform
     if ($plat -eq [platform]::Windows) {
 

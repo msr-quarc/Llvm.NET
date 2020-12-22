@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(LibLLVM VERSION 0.1.0)
+project(Ubiquity.NET.LibLlvm VERSION 0.1.0)
 
 if(POLICY CMP0076)
   cmake_policy(SET CMP0076 NEW)
@@ -13,6 +13,14 @@ message("C++ compiler ID is " ${CMAKE_CXX_COMPILER_ID})
 
 message(INFO "*** build config: ${CMAKE_BUILD_TYPE}")
 
+# windows specific flags
+if (MSVC)
+  # always create debug info
+  add_definitions("/Zi")
+else (MSVC)
+  set(CMAKE_CXX_FLAGS "-static-libgcc")
+endif (MSVC)
+
 set(CMAKE_VERBOSE_MAKEFILE TRUE)
 set(LLVM_VERSION_STRING "10.0.0")
 set(LLVM_VERSION_MAJOR "10")
@@ -24,22 +32,24 @@ enable_testing()
 
 link_directories(BEFORE "../../../llvm/x64-Release/Release/lib")
 
-add_library(LibLLVM SHARED "")
+add_library(Ubiquity.NET.LibLlvm SHARED "")
 
-target_include_directories(LibLLVM PRIVATE "../../../llvm/x64-Release/include")
-target_include_directories(LibLLVM PRIVATE "../../../llvm/include")
-target_include_directories(LibLLVM PRIVATE "../../../llvm/lib/ExecutionEngine/Orc")
-target_include_directories(LibLLVM PRIVATE "include")
-target_include_directories(LibLLVM PRIVATE ".")
+set_target_properties(Ubiquity.NET.LibLlvm PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+
+target_include_directories(Ubiquity.NET.LibLlvm PRIVATE "../../../llvm/x64-Release/include")
+target_include_directories(Ubiquity.NET.LibLlvm PRIVATE "../../../llvm/include")
+target_include_directories(Ubiquity.NET.LibLlvm PRIVATE "../../../llvm/lib/ExecutionEngine/Orc")
+target_include_directories(Ubiquity.NET.LibLlvm PRIVATE "include")
+target_include_directories(Ubiquity.NET.LibLlvm PRIVATE ".")
 
 add_compile_definitions("NDEBUG" "_USRDLL" "LIBLLVM_EXPORTS" "LibLLVM_EXPORTS")
 add_compile_definitions("_ITERATOR_DEBUG_LEVEL=0")
 
 if (WIN32)
-    target_sources(LibLLVM PUBLIC "EXPORTS.g.DEF")
+    target_sources(Ubiquity.NET.LibLlvm PUBLIC "EXPORTS.g.DEF")
 endif()
 
-target_sources(LibLLVM PRIVATE 
+target_sources(Ubiquity.NET.LibLlvm PRIVATE 
     "AnalysisBindings" 
     "AttributeBindings" 
     "ContextBindings" 
@@ -56,7 +66,7 @@ target_sources(LibLLVM PRIVATE
     "TripleBindings" 
     "ValueBindings")
 
-target_link_libraries(LibLLVM PRIVATE
+target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE
         "LLVMAArch64AsmParser"
         "LLVMAArch64CodeGen"
         "LLVMAArch64Desc"
