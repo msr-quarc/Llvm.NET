@@ -13,14 +13,6 @@ message("C++ compiler ID is " ${CMAKE_CXX_COMPILER_ID})
 
 message(INFO "*** build config: ${CMAKE_BUILD_TYPE}")
 
-# windows specific flags
-if (MSVC)
-  # always create debug info
-  add_definitions("/Zi")
-else (MSVC)
-  set(CMAKE_CXX_FLAGS "-static-libgcc")
-endif (MSVC)
-
 set(CMAKE_CXX_STANDARD 14 CACHE STRING "C++ standard to conform to")
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
