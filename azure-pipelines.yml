@@ -24,7 +24,8 @@ jobs:
     displayName: 'Run Build-Source.ps1 script (Windows Only)'
     condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
   - pwsh: ./Invoke-UnitTests.ps1
-    displayName: 'Run Invoke-UnitTests.ps1 script'
+    displayName: 'Run Invoke-UnitTests.ps1 script (Windows Only)'
+    condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: Ubiquity.NET.Llvm'
     condition: succeededOrFailed()

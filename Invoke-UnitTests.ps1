@@ -3,11 +3,6 @@ try
     . .\buildutils.ps1
     $buildInfo = Initialize-BuildEnvironment
 
-    $plat = Get-Platform
-    if ($plat -ne [platform]::Windows) {
-        return
-    }
-
     Write-Information 'Running Interop tests as x64'
     Invoke-DotNetTest $buildInfo 'src\Interop\InteropTests\InteropTests.csproj'
 
