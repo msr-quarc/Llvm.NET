@@ -2,7 +2,12 @@ Push-Location $PSScriptRoot
 $oldPath = $env:Path
 try
 {
+    . .\buildutils.ps1
+    $buildInfo = Initialize-BuildEnvironment
+
     .\Build-Interop.ps1
+
+    Remove-Item -Force -Recurse -Path (Join-Path $buildInfo["BuildOutputPath"] bin)
 
     .\Build-DotNet.ps1
 
