@@ -9,6 +9,14 @@ try
     . .\buildutils.ps1
     $buildInfo = Initialize-BuildEnvironment
 
+    if ($buildInfo["Platform"] -eq [platform]::Mac) {
+        # Try to setup zlib links
+        sudo ln -s /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/* /usr/local/include/
+        if ($LASTEXITCODE -ne 0) {
+            throw "Failed to setup zlib links on Mac with exitcode: $LASTEXITCODE"
+        }
+    }
+
     # Need to invoke NuGet directly for restore of vcxproj as /t:Restore target doesn't support packages.config
     # and PackageReference isn't supported for native projects... [Sigh...]
     Write-Information "Restoring LibLLVM"
@@ -41,10 +49,10 @@ try
     }
     cd $PSScriptRoot
 
-    if ($plat -eq [platform]::Windows) {
+    if ($buildInfo['Platform'] -eq [platform]::Windows) {
         New-Item -ErrorAction SilentlyContinue -ItemType Container -Path (Join-Path $buildInfo["NativeXplat"] win-x64)
         Copy-Item -Force -Path (Join-Path $buildOutputDir $Configuration *) (Join-Path $buildInfo["NativeXplat"] win-x64)
-    } elseif ($plat -eq [platform]::Linux) {
+    } elseif ($buildInfo['Platform'] -eq [platform]::Linux) {
         New-Item -ErrorAction SilentlyContinue -ItemType Container -Path (Join-Path $buildInfo["NativeXplat"] linux-x64)
         ls $buildOutputDir
         Copy-Item -Force -Path (Join-Path $buildOutputDir libUbiquity.NET.LibLlvm.so) (Join-Path $buildInfo["NativeXplat"] linux-x64 Ubiquity.NET.LibLlvm.dll)
