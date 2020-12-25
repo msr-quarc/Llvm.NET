@@ -9,11 +9,6 @@ try
     . .\buildutils.ps1
     $buildInfo = Initialize-BuildEnvironment
 
-    if ($buildInfo["Platform"] -eq [platform]::Mac) {
-        # Try to setup zlib links
-        sudo ln -s /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/* /usr/local/lib/
-    }
-
     # Need to invoke NuGet directly for restore of vcxproj as /t:Restore target doesn't support packages.config
     # and PackageReference isn't supported for native projects... [Sigh...]
     Write-Information "Restoring LibLLVM"

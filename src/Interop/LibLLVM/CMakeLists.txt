@@ -43,6 +43,16 @@ add_compile_definitions("_ITERATOR_DEBUG_LEVEL=0")
 
 if (WIN32)
     target_sources(Ubiquity.NET.LibLlvm PUBLIC "EXPORTS.g.DEF")
+else (WIN32)
+  foreach(library z zlib_static zlib)
+    string(TOUPPER ${library} library_suffix)
+    check_library_exists(${library} compress2 "" HAVE_LIBZ_${library_suffix})
+    if(HAVE_LIBZ_${library_suffix})
+      message(INFO "*** found zlib library: ${library}")
+      target_link_libraries(Ubiquity.NET.LibLlvm PUBLIC "${library}")
+      break()
+    endif()
+  endforeach()
 endif()
 
 target_sources(Ubiquity.NET.LibLlvm PRIVATE 
