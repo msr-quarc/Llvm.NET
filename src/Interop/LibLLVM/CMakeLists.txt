@@ -43,12 +43,6 @@ add_compile_definitions("_ITERATOR_DEBUG_LEVEL=0")
 
 if (WIN32)
     target_sources(Ubiquity.NET.LibLlvm PUBLIC "EXPORTS.g.DEF")
-else (WIN32)
-    set(ZLIB_DIR "/usr/local/opt/zlib/lib/pkgconfig")
-    find_package(ZLIB CONFIG)
-    if (ZLIB_FOUND)
-        target_link_libraries(Ubiquity.NET.LibLlvm PUBLIC ZLIB_LIBRARY)
-    endif()
 endif()
 
 target_sources(Ubiquity.NET.LibLlvm PRIVATE 
