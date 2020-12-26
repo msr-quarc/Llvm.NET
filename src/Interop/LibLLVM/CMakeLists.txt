@@ -48,7 +48,7 @@ endif()
 if (APPLE)
     execute_process(COMMAND xcrun --show-sdk-path OUTPUT_VARIABLE XCODE_SDK_PATH)
     message(INFO "*** Adding xcode sdk: ${XCODE_SDK_PATH}")
-    target_link_directories(Ubiquity.NET.LibLlvm PUBLIC "${XCODE_SDK_PATH}}")
+    target_link_directories(Ubiquity.NET.LibLlvm PRIVATE "${XCODE_SDK_PATH}}")
 endif()
 
 target_sources(Ubiquity.NET.LibLlvm PRIVATE 
