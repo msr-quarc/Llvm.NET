@@ -52,7 +52,7 @@ function Move-Tree ([string]$source, [string]$dest, [string[]]$filter = @("*"), 
             Write-Verbose "Creating directory $($destDir)"
             New-Item -Path $destDir -ItemType "directory" -Force
         }
-        Move-Item -Path (Join-Path $source $itemSrc) -Destination $itemDest
+        Move-Item -Path (Join-Path $source $itemSrc) -Destination $itemDest -Verbose
     }
 }
 
@@ -70,9 +70,12 @@ if (Test-Path $destBase) {
 $sourceConfiguration = $Configuration
 $libIncFilter = @("*")
 $platform = Get-Platform
-if ($platform -ne [platform]::Windows) {
+if ($platform -eq [platform]::Linux) {
     $sourceConfiguration = ""
     $libIncfilter = @("*.a")
+} elseif ($platform -eq [platform]::Mac) {
+    $sourceConfiguration = ""
+    $libIncFilter = @("*.a", "*.dylib")
 } elseif ($sourceConfiguration = "Release") {
     $sourceConfiguration = "RelWithDebInfo"
 }
