@@ -62,6 +62,12 @@ target_sources(Ubiquity.NET.LibLlvm PRIVATE
     "TripleBindings" 
     "ValueBindings")
 
+if (APPLE)
+    execute_process(COMMAND xcrun --show-sdk-path OUTPUT_VARIABLE XCODE_SDK_PATH)
+    message(INFO "*** Adding xcode sdk: ${XCODE_SDK_PATH}")
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-L${XCODE_SDK_PATH}")
+endif()
+
 target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE
         "LLVMAArch64AsmParser"
         "LLVMAArch64CodeGen"
