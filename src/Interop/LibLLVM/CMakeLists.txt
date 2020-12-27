@@ -26,13 +26,7 @@ set(LLVM_VERSION_PATCH "0")
 include(CTest)
 enable_testing()
 
-if (APPLE)
-    execute_process(COMMAND xcrun --show-sdk-path OUTPUT_VARIABLE XCODE_SDK_PATH)
-    message(INFO "*** Adding xcode sdk: ${XCODE_SDK_PATH}")
-    link_directories(BEFORE "../../../llvm/x64-Release/Release/lib" "${XCODE_SDK_PATH}}")
-else (APPLE)
-    link_directories(BEFORE "../../../llvm/x64-Release/Release/lib")
-endif()
+link_directories(BEFORE "../../../llvm/x64-Release/Release/lib")
 
 add_library(Ubiquity.NET.LibLlvm SHARED "")
 
