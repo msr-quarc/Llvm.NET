@@ -26,6 +26,14 @@ set(LLVM_VERSION_PATCH "0")
 include(CTest)
 enable_testing()
 
+if (APPLE)
+    execute_process(COMMAND xcrun --show-sdk-path OUTPUT_VARIABLE XCODE_SDK_PATH)
+    message(INFO "*** Adding xcode sdk: ${XCODE_SDK_PATH}")
+    link_directories(BEFORE "../../../llvm/x64-Release/Release/lib" "${XCODE_SDK_PATH}}")
+else (APPLE)
+    link_directories(BEFORE "../../../llvm/x64-Release/Release/lib")
+endif()
+
 add_library(Ubiquity.NET.LibLlvm SHARED "")
 
 set_target_properties(Ubiquity.NET.LibLlvm PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
@@ -41,14 +49,6 @@ add_compile_definitions("_ITERATOR_DEBUG_LEVEL=0")
 
 if (WIN32)
     target_sources(Ubiquity.NET.LibLlvm PUBLIC "EXPORTS.g.DEF")
-endif()
-
-if (APPLE)
-    execute_process(COMMAND xcrun --show-sdk-path OUTPUT_VARIABLE XCODE_SDK_PATH)
-    message(INFO "*** Adding xcode sdk: ${XCODE_SDK_PATH}")
-    target_link_directories(Ubiquity.NET.LibLlvm BEFORE PRIVATE "../../../llvm/x64-Release/Release/lib" "${XCODE_SDK_PATH}}")
-else (APPLE)
-    target_link_directories(Ubiquity.NET.LibLlvm BEFORE PRIVATE "../../../llvm/x64-Release/Release/lib")
 endif()
 
 target_sources(Ubiquity.NET.LibLlvm PRIVATE 
