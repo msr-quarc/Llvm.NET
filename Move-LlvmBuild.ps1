@@ -72,7 +72,7 @@ if ($env:BUILD_LLVM -eq "true") {
     } else {
         $plat = "mac"
     }
-    $destBase = Join-Path $buildPaths["ArtifactDrops"] $plat
+    $destBase = Join-Path $buildInfo["ArtifactDrops"] $plat
 }
 
 if (Test-Path $destBase) {
