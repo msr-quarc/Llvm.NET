@@ -5,6 +5,11 @@ try
     . .\buildutils.ps1
     $buildInfo = Initialize-BuildEnvironment
 
+    if ($env:BUILD_LLVM -eq "true") {
+        Write-Host '##vso[task.logissue type=warning;]Exiting early after building LLVM'
+        return
+    }
+
     .\Build-Interop.ps1
 
     Remove-Item -Force -Recurse -Path (Join-Path $buildInfo["BuildOutputPath"] bin)

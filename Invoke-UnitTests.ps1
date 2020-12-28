@@ -3,6 +3,11 @@ try
     . .\buildutils.ps1
     $buildInfo = Initialize-BuildEnvironment
 
+    if ($env:BUILD_LLVM -eq "true") {
+        Write-Host '##vso[task.logissue type=warning;]Exiting early after building LLVM'
+        return
+    }
+
     Write-Information 'Running Interop tests as x64'
     Invoke-DotNetTest $buildInfo 'src\Interop\InteropTests\InteropTests.csproj'
 

@@ -59,8 +59,21 @@ function Move-Tree ([string]$source, [string]$dest, [string[]]$filter = @("*"), 
 Write-Information "Moving LLVM build outputs to the expected location"
 
 . $PSScriptRoot\buildutils.ps1
+$buildInfo = Initialize-BuildEnvironment
 
 $destBase = (Join-Path $PSScriptRoot "llvm")
+
+if ($env:BUILD_LLVM -eq "true") {
+    # Instead, copy to build output
+    if ($buildInfo['Platform'] -eq [platform]::Windows) {
+        $plat = "win32"
+    } elseif ($buildInfo['Platform'] -eq [platform]::Linux) {
+        $plat = "linux"
+    } else {
+        $plat = "mac"
+    }
+    $destBase = Join-Path $buildPaths["ArtifactDrops"] $plat
+}
 
 if (Test-Path $destBase) {
     Write-Verbose "Cleaning out the old data from $($destbase)"
@@ -69,11 +82,10 @@ if (Test-Path $destBase) {
 
 $sourceConfiguration = $Configuration
 $libIncFilter = @("*")
-$platform = Get-Platform
-if ($platform -eq [platform]::Linux) {
+if ($buildInfo['Platform'] -eq [platform]::Linux) {
     $sourceConfiguration = ""
     $libIncfilter = @("*.a")
-} elseif ($platform -eq [platform]::Mac) {
+} elseif ($buildInfo['Platform'] -eq [platform]::Mac) {
     $sourceConfiguration = ""
     $libIncFilter = @("*.a", "*.dylib")
 } elseif ($sourceConfiguration = "Release") {
