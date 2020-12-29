@@ -14,11 +14,6 @@ try
     if ($env:BUILD_LLVM -ne "true") {
         .\Build-LibLlvm.ps1
     }
-
-    if ($buildInfo['Platform'] -ne [platform]::Windows) {
-        # Clean up to avoid propagating LLVM build to later pipeline steps.
-        Remove-Item -Recurse -Force $buildInfo["BuildOutputPath"]
-    }
 }
 catch
 {

@@ -71,10 +71,17 @@ if ($buildInfo['Platform'] -eq [platform]::Windows) {
 if ($env:BUILD_LLVM -ne "true") {
     # Copy from cached headers.
     $basePath = Join-Path $PSScriptRoot llvm
-    Move-Item (Join-Path $basePath xplat $plat *.h) (Join-Path $basePath Include llvm Config) -Verbose
-    Move-Item (Join-Path $basePath xplat $plat x64-Release *.h) (Join-Path $basePath x64-Release Include llvm Config) -Verbose
+    Copy-Item -Force (Join-Path $basePath xplat $plat *.h) (Join-Path $basePath Include llvm Config) -Verbose
+    Copy-Item -Force (Join-Path $basePath xplat $plat x64-Release *.h) (Join-Path $basePath x64-Release Include llvm Config) -Verbose
 
     # Copy from cached binaries.
+    $oldDir = Get-Location
+    Set-Location (Join-Path $basePath x64-Release Release)
+    foreach ($zip in (Get-ChildItem (Join-Path $basePath xplat $plat x64-Release) -Include "*.zip.*")) {
+        Write-Information "Unzipping $($zip.fullname)..."
+        tar -xf ($zip.fullname)
+    }
+    Set-Location $oldDir
 } else {
     # Copy to build output
     $destBase = Join-Path $buildInfo["ArtifactDrops"] $plat
