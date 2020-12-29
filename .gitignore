@@ -138,7 +138,7 @@ FakesAssemblies/
 #build output locations
 BuildOutput/
 IntermediateOutput/
-xplat/
+/xplat/
 
 
 Tools/
@@ -157,10 +157,14 @@ Tools/
 *.binlog
 *.7z
 
-/llvm/**/lib
+# Ignore the unpacked llvm binaries
+/llvm/x64-Release/lib
+
+# These few headers are the only platform specific ones.
 /llvm/**/include/llvm/Config/abi-breaking.h
 /llvm/**/include/llvm/Config/config.h
 /llvm/**/include/llvm/Config/llvm-config.h
+
 **/GeneratedDocs/
 **/GeneratedCode/
 
