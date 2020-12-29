@@ -75,16 +75,18 @@ if ($env:BUILD_LLVM -ne "true") {
     Copy-Item -Force (Join-Path $basePath xplat $plat x64-Release *.h) (Join-Path $basePath x64-Release include llvm Config) -Verbose
 
     # Copy from cached binaries.
-    $oldDir = Get-Location
-    if (!(Test-Path (Join-Path $basePath x64-Release Release))) {
-        New-Item -ItemType Container (Join-Path $basePath x64-Release Release)
+    $releaseDir = (Join-Path $basePath x64-Release Release)
+    if (!(Test-Path $releaseDir)) {
+        New-Item -ItemType Container $releaseDir
     }
-    Set-Location (Join-Path $basePath x64-Release Release)
-    foreach ($zip in (Get-ChildItem (Join-Path $basePath xplat $plat x64-Release) -Recurse -Include "*.zip.*")) {
+    $libDir = Join-Path $releaseDir lib
+    if (!(Test-Path $libDir)) {
+        New-Item -ItemType Container $libDir
+    }
+    foreach ($zip in (Get-ChildItem (Join-Path $basePath xplat $plat x64-Release) -Recurse -Include "*.zip")) {
         Write-Information "Unzipping $($zip.fullname)..."
-        tar -xf ($zip.fullname)
+        Expand-Archive -LiteralPath $zip.fullname -DestinationPath $libDir -Force
     }
-    Set-Location $oldDir
 } else {
     # Copy to build output
     $destBase = Join-Path $buildInfo["ArtifactDrops"] $plat
