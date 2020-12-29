@@ -158,7 +158,7 @@ Tools/
 *.7z
 
 # Ignore the unpacked llvm binaries
-/llvm/x64-Release/lib
+/llvm/x64-Release/**/lib
 
 # These few headers are the only platform specific ones.
 /llvm/**/include/llvm/Config/abi-breaking.h
