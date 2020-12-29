@@ -71,11 +71,14 @@ if ($buildInfo['Platform'] -eq [platform]::Windows) {
 if ($env:BUILD_LLVM -ne "true") {
     # Copy from cached headers.
     $basePath = Join-Path $PSScriptRoot llvm
-    Copy-Item -Force (Join-Path $basePath xplat $plat *.h) (Join-Path $basePath Include llvm Config) -Verbose
-    Copy-Item -Force (Join-Path $basePath xplat $plat x64-Release *.h) (Join-Path $basePath x64-Release Include llvm Config) -Verbose
+    Copy-Item -Force (Join-Path $basePath xplat $plat *.h) (Join-Path $basePath include llvm Config) -Verbose
+    Copy-Item -Force (Join-Path $basePath xplat $plat x64-Release *.h) (Join-Path $basePath x64-Release include llvm Config) -Verbose
 
     # Copy from cached binaries.
     $oldDir = Get-Location
+    if (!(Test-Path (Join-Path $basePath x64-Release Release))) {
+        New-Item -ItemType Container (Join-Path $basePath x64-Release Release)
+    }
     Set-Location (Join-Path $basePath x64-Release Release)
     foreach ($zip in (Get-ChildItem (Join-Path $basePath xplat $plat x64-Release) -Include "*.zip.*")) {
         Write-Information "Unzipping $($zip.fullname)..."
