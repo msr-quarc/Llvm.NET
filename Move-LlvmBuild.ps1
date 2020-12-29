@@ -80,7 +80,7 @@ if ($env:BUILD_LLVM -ne "true") {
         New-Item -ItemType Container (Join-Path $basePath x64-Release Release)
     }
     Set-Location (Join-Path $basePath x64-Release Release)
-    foreach ($zip in (Get-ChildItem (Join-Path $basePath xplat $plat x64-Release) -Include "*.zip.*")) {
+    foreach ($zip in (Get-ChildItem (Join-Path $basePath xplat $plat x64-Release) -Recurse -Include "*.zip.*")) {
         Write-Information "Unzipping $($zip.fullname)..."
         tar -xf ($zip.fullname)
     }
