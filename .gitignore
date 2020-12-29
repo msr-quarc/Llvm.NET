@@ -157,7 +157,10 @@ Tools/
 *.binlog
 *.7z
 
-/llvm
+/llvm/**/lib
+/llvm/**/include/llvm/Config/abi-breaking.h
+/llvm/**/include/llvm/Config/config.h
+/llvm/**/include/llvm/Config/llvm-config.h
 **/GeneratedDocs/
 **/GeneratedCode/
 
