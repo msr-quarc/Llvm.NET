@@ -6,10 +6,10 @@ try
     $buildInfo = Initialize-BuildEnvironment
 
     if ($env:BUILD_LLVM -eq "true") {
-        .\Build-Llvm.ps1
+        .\Build-Llvm.ps1 -Configuration MinSizeRel
     }
 
-    .\Move-LlvmBuild.ps1
+    .\Move-LlvmBuild.ps1 -Configuration MinSizeRel
 
     if ($env:BUILD_LLVM -ne "true") {
         .\Build-LibLlvm.ps1
