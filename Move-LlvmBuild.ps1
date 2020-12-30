@@ -1,6 +1,6 @@
 Param(
     [string]$Configuration="Release",
-    [string]$BuildName="x64-Release",
+    [string]$BuildName="x64-$Configuration",
     [string]$BuildRoot=(Join-Path ($PSScriptRoot) "llvm-project" "llvm" "BuildOutput"))
 
 $InformationPreference = "Continue"
