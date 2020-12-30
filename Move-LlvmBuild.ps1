@@ -104,8 +104,8 @@ if ($env:BUILD_LLVM -ne "true") {
     } elseif ($buildInfo['Platform'] -eq [platform]::Mac) {
         $sourceConfiguration = ""
         $libIncFilter = @("*.a", "*.dylib")
-    } elseif ($sourceConfiguration = "Release") {
-        $sourceConfiguration = "RelWithDebInfo"
+    # } elseif ($sourceConfiguration = "Release") {
+    #     $sourceConfiguration = "RelWithDebInfo"
     }
 
 

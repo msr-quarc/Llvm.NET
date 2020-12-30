@@ -1,5 +1,5 @@
 Param(
-    [string]$Configuration="RelWithDebInfo"
+    [string]$Configuration="Release"
 )
 
 pushd $PSScriptRoot

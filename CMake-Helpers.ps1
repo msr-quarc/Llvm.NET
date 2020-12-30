@@ -50,14 +50,14 @@ class CMakeConfig
         }
 
         $this.Name="$($this.Platform)-$config"
-        if($config -ieq "Release" )
-        {
-            $this.ConfigurationType = "RelWithDebInfo"
-        }
-        else
-        {
+        # if($config -ieq "Release" )
+        # {
+        #     $this.ConfigurationType = "RelWithDebInfo"
+        # }
+        # else
+        # {
             $this.ConfigurationType = $config
-        }
+        # }
 
         $this.BuildRoot = Join-Path $baseBuild $this.Name
         $this.SrcRoot = $srcRoot
