@@ -22,7 +22,7 @@ try
     New-Item -Path $buildOutputDir -ItemType Container
 
     $target = "all"
-    $generator = "-G`"Unix Makefiles`""
+    $generator = "" #"-G`"Unix Makefiles`""
     if ($buildInfo['Platform'] -eq [platform]::Windows) {
         $target = "ALL_BUILD"
         $generator = ""
