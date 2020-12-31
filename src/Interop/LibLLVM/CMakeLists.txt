@@ -45,12 +45,12 @@ if (WIN32)
     target_sources(Ubiquity.NET.LibLlvm PUBLIC "EXPORTS.g.DEF")
 endif()
 
-if (APPLE)
-    execute_process(COMMAND xcrun --show-sdk-path COMMAND tr -d '\n' OUTPUT_VARIABLE XCODE_SDK_PATH)
-    message(INFO "*** Adding xcode sdk: ${XCODE_SDK_PATH}")
-    target_link_directories(Ubiquity.NET.LibLlvm PRIVATE "${XCODE_SDK_PATH}/usr/lib")
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "LLVMMLIRTableGen")
-endif()
+#if (APPLE)
+#    execute_process(COMMAND xcrun --show-sdk-path COMMAND tr -d '\n' OUTPUT_VARIABLE XCODE_SDK_PATH)
+#    message(INFO "*** Adding xcode sdk: ${XCODE_SDK_PATH}")
+#    target_link_directories(Ubiquity.NET.LibLlvm PRIVATE "${XCODE_SDK_PATH}/usr/lib")
+#    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "LLVMMLIRTableGen")
+#endif()
 
 target_sources(Ubiquity.NET.LibLlvm PRIVATE 
     "AnalysisBindings" 
