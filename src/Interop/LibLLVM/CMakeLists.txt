@@ -192,7 +192,6 @@ target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE
         "LLVMSystemZDisassembler"
         "LLVMSystemZInfo"
         "LLVMTableGen"
-        "LLVMTableGenGlobalISel"
         "LLVMTarget"
         "LLVMTextAPI"
         "LLVMTransformUtils"
