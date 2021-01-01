@@ -1,7 +1,8 @@
 variables:
   Drops.Dir: $(Build.ArtifactStagingDirectory)/drops
   Drop.Native: $(System.DefaultWorkingDirectory)/xplat
-  Build.Llvm: "false"
+  Output.Llvm: "false"
+  Build.Llvm: "true"
 
 jobs:
 - job: Build

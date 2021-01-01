@@ -5,13 +5,13 @@ try
     . .\buildutils.ps1
     $buildInfo = Initialize-BuildEnvironment
 
-    if ($env:BUILD_LLVM -eq "true") {
+    if ($env:OUTPUT_LLVM -eq "true" -or $env:BUILD_LLVM -eq "true") {
         .\Build-Llvm.ps1 -Configuration MinSizeRel
     }
 
     .\Move-LlvmBuild.ps1 -Configuration MinSizeRel
 
-    if ($env:BUILD_LLVM -ne "true") {
+    if ($env:OUTPUT_LLVM -ne "true") {
         .\Build-LibLlvm.ps1
     }
 }

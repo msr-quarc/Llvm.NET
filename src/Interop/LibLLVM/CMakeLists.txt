@@ -60,12 +60,10 @@ target_sources(Ubiquity.NET.LibLlvm PRIVATE
     "ObjectFileBindings"
     "InlinedExports" 
     "IRBindings" 
-    "LegacyPassManagerOpt" 
     "LibLlvmOrcJitBindings"
     "MetadataBindings" 
     "PassManagerBindings" 
     "ModuleBindings" 
-    "NewOptPassDriver" 
     "TripleBindings" 
     "ValueBindings")
 

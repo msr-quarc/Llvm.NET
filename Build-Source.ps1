@@ -5,7 +5,7 @@ try
     . .\buildutils.ps1
     $buildInfo = Initialize-BuildEnvironment
 
-    if ($env:BUILD_LLVM -eq "true") {
+    if ($env:OUTPUT_LLVM -eq "true") {
         Write-Host '##vso[task.logissue type=warning;]Exiting early after building LLVM'
         return
     }
