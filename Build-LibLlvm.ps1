@@ -22,14 +22,12 @@ try
     New-Item -Path $buildOutputDir -ItemType Container
 
     $target = "all"
-    $generator = "" #"-G`"Unix Makefiles`""
     if ($buildInfo['Platform'] -eq [platform]::Windows) {
         $target = "ALL_BUILD"
-        $generator = ""
     }
     Write-Information "Building LibLLVM"
     cd $buildOutputDir
-    cmake $generator (Resolve-Path ..)
+    cmake (Resolve-Path ..)
     if($LASTEXITCODE -ne 0 )
     {
         throw "LibLLVM CMake generate exited with code: $LASTEXITCODE"
