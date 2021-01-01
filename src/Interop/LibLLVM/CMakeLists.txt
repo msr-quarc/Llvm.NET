@@ -49,8 +49,8 @@ if (APPLE)
 #    execute_process(COMMAND xcrun --show-sdk-path COMMAND tr -d '\n' OUTPUT_VARIABLE XCODE_SDK_PATH)
 #    message(INFO "*** Adding xcode sdk: ${XCODE_SDK_PATH}")
 #    target_link_directories(Ubiquity.NET.LibLlvm PRIVATE "${XCODE_SDK_PATH}/usr/lib")
-    # Explicitly add a link to the libz.dylib.
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z")
+    # Explicitly add a link to the libz and tinfo
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z" "tinfo")
 endif()
 
 target_sources(Ubiquity.NET.LibLlvm PRIVATE 
