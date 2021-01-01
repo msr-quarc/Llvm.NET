@@ -46,10 +46,7 @@ if (WIN32)
 endif()
 
 if (APPLE)
-#    execute_process(COMMAND xcrun --show-sdk-path COMMAND tr -d '\n' OUTPUT_VARIABLE XCODE_SDK_PATH)
-#    message(INFO "*** Adding xcode sdk: ${XCODE_SDK_PATH}")
-#    target_link_directories(Ubiquity.NET.LibLlvm PRIVATE "${XCODE_SDK_PATH}/usr/lib")
-    # Explicitly add a link to the libz and tinfo
+    # Explicitly add a link to libz and libncurses
     target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z" "ncurses")
 endif()
 
