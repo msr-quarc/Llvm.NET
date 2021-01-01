@@ -38,6 +38,8 @@ target_include_directories(Ubiquity.NET.LibLlvm PRIVATE "../../../llvm/lib/Execu
 target_include_directories(Ubiquity.NET.LibLlvm PRIVATE "include")
 target_include_directories(Ubiquity.NET.LibLlvm PRIVATE ".")
 
+target_link_directories(Ubiquity.NET.LibLlvm BEFORE PRIVATE "../../../llvm/x64-Release/Release/lib")
+
 add_compile_definitions("NDEBUG" "_USRDLL" "LIBLLVM_EXPORTS" "LibLLVM_EXPORTS")
 add_compile_definitions("_ITERATOR_DEBUG_LEVEL=0")
 
@@ -58,12 +60,12 @@ target_sources(Ubiquity.NET.LibLlvm PRIVATE
     "ObjectFileBindings"
     "InlinedExports" 
     "IRBindings" 
-#   "LegacyPassManagerOpt" 
+    "LegacyPassManagerOpt" 
     "LibLlvmOrcJitBindings"
     "MetadataBindings" 
     "PassManagerBindings" 
     "ModuleBindings" 
-#   "NewOptPassDriver" 
+    "NewOptPassDriver" 
     "TripleBindings" 
     "ValueBindings")
 
