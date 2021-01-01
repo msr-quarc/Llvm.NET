@@ -50,7 +50,7 @@ if (APPLE)
 #    message(INFO "*** Adding xcode sdk: ${XCODE_SDK_PATH}")
 #    target_link_directories(Ubiquity.NET.LibLlvm PRIVATE "${XCODE_SDK_PATH}/usr/lib")
     # Explicitly add a link to the libz and tinfo
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z" "tinfo")
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z" "ncurses")
 endif()
 
 target_sources(Ubiquity.NET.LibLlvm PRIVATE 
