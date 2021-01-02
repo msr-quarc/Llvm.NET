@@ -158,8 +158,8 @@ Tools/
 *.7z
 
 # Ignore the unpacked llvm binaries
-/llvm/lib
-/llvm/include
+/llvm/lib/*
+/llvm/include/*
 
 **/GeneratedDocs/
 **/GeneratedCode/
