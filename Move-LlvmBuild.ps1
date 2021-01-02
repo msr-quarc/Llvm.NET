@@ -71,22 +71,19 @@ if ($buildInfo['Platform'] -eq [platform]::Windows) {
 if ($env:OUTPUT_LLVM -ne "true" -and $env:BUILD_LLVM -ne "true") {
     # Copy from cached headers.
     $basePath = Join-Path $PSScriptRoot llvm
-    Copy-Item -Force (Join-Path $basePath xplat $plat *.h) (Join-Path $basePath include llvm Config) -Verbose
-    Copy-Item -Force (Join-Path $basePath xplat $plat x64-Release *.h) (Join-Path $basePath x64-Release include llvm Config) -Verbose
+    Copy-Item -Force -Recurse (Join-Path $basePath xplat $plat include) $basePath -Verbose
 
     # Copy from cached binaries.
-    $releaseDir = (Join-Path $basePath x64-Release Release)
-    if (!(Test-Path $releaseDir)) {
-        New-Item -ItemType Container $releaseDir
-    }
-    $libDir = Join-Path $releaseDir lib
+    $libDir = Join-Path $basePath lib
     if (!(Test-Path $libDir)) {
         New-Item -ItemType Container $libDir
     }
-    foreach ($zip in (Get-ChildItem (Join-Path $basePath xplat $plat x64-Release) -Recurse -Include "*.zip")) {
+    foreach ($zip in (Get-ChildItem (Join-Path $basePath xplat $plat) -Recurse -Include "*.zip")) {
         Write-Information "Unzipping $($zip.fullname)..."
         Expand-Archive -LiteralPath $zip.fullname -DestinationPath $libDir -Force
     }
+
+    Copy-Item -Force -Recurse (Join-Path $basePath xplat ExecutionEngine) (Join-Path $basePath lib) -Verbose
 } else {
     if ($env:BUILD_LLVM -eq "true") {
         $destBase = (Join-Path $PSScriptRoot "llvm")
