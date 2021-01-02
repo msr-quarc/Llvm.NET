@@ -36,7 +36,7 @@ function Copy-Tree ([string]$source, [string]$dest, [string[]]$filter = @("*"), 
             Write-Verbose "Creating directory $($destDir)"
             New-Item -Path $destDir -ItemType "directory" -Force
         }
-        Copy-Item -Path (Join-Path $source $itemSrc) -Destination $itemDest
+        Copy-Item -Path (Join-Path $source $itemSrc) -Destination $itemDest -Force
     }
 }
 
@@ -52,7 +52,7 @@ function Move-Tree ([string]$source, [string]$dest, [string[]]$filter = @("*"), 
             Write-Verbose "Creating directory $($destDir)"
             New-Item -Path $destDir -ItemType "directory" -Force
         }
-        Move-Item -Path (Join-Path $source $itemSrc) -Destination $itemDest -Verbose
+        Move-Item -Path (Join-Path $source $itemSrc) -Destination $itemDest -Verbose -Force
     }
 }
 
@@ -119,21 +119,21 @@ if ($env:OUTPUT_LLVM -ne "true" -and $env:BUILD_LLVM -ne "true") {
 
 
     $libSource = (Join-Path ($BuildRoot) ($BuildName) ($sourceConfiguration) "lib")
-    $libDest = (Join-Path ($destBase) ($BuildName) ($Configuration) "lib")
+    $libDest = (Join-Path ($destBase) "lib")
     Write-Verbose "Moving built libraries from $($libSource) to $($libDest)"
     Move-Tree $libSource $libDest ($libIncFilter)
-
-    $incSource = (Join-Path ($BuildRoot) ($BuildName) "include")
-    $incDest = (Join-Path ($destbase) ($BuildName) "include")
-    $incFilter = @( '*.h', '*.gen', '*.def', '*.inc' )
-    Write-Verbose "Moving headers from $($incSource) to $($incDest)"
-    Move-Tree $incSource $incDest ($incFilter)
 
     $inc2Source = (Join-Path (Split-Path $BuildRoot -Parent) "include")
     $inc2Dest = (Join-Path ($destbase) "include")
     $inc2Exclude = @( '*.txt')
     Write-Verbose "Moving headers from $($inc2Source) to $($inc2Dest)"
     Copy-Tree $inc2Source $inc2Dest -exclude ($inc2Exclude)
+
+    $incSource = (Join-Path ($BuildRoot) ($BuildName) "include")
+    $incDest = (Join-Path ($destbase) "include")
+    $incFilter = @( '*.h', '*.gen', '*.def', '*.inc' )
+    Write-Verbose "Moving headers from $($incSource) to $($incDest)"
+    Move-Tree $incSource $incDest ($incFilter)
 
     $cfgSource = (Join-Path $BuildRoot ($BuildName) "NATIVE" "include" "llvm" "Config")
     $cfgDest = (Join-Path ($destbase) "include" "llvm" "Config")
