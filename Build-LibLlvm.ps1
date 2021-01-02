@@ -49,7 +49,7 @@ try
     } else {
         New-Item -ErrorAction SilentlyContinue -ItemType Container -Path (Join-Path $buildInfo["NativeXplat"] osx-x64)
         ls $buildOutputDir
-        Copy-Item -Force -Path (Join-Path $buildOutputDir libUbiquity.NET.LibLlvm.dynlib) (Join-Path $buildInfo["NativeXplat"] osx-x64 Ubiquity.NET.LibLlvm.dll)
+        Copy-Item -Force -Path (Join-Path $buildOutputDir libUbiquity.NET.LibLlvm.dylib) (Join-Path $buildInfo["NativeXplat"] osx-x64 Ubiquity.NET.LibLlvm.dll)
     }
 }
 finally
