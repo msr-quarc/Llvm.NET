@@ -13,10 +13,10 @@
 #define LLVM_ABI_BREAKING_CHECKS_H
 
 /* Define to enable checks that alter the LLVM C++ ABI */
-#define LLVM_ENABLE_ABI_BREAKING_CHECKS 1
+#cmakedefine01 LLVM_ENABLE_ABI_BREAKING_CHECKS
 
 /* Define to enable reverse iteration of unordered llvm containers */
-#define LLVM_ENABLE_REVERSE_ITERATION 1
+#cmakedefine01 LLVM_ENABLE_REVERSE_ITERATION
 
 /* Allow selectively disabling link-time mismatch checking so that header-only
    ADT content from LLVM can be used without linking libSupport. */
