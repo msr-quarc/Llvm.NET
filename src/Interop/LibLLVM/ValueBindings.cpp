@@ -6,7 +6,6 @@
 #include <llvm/IR/GlobalObject.h>
 #include <llvm/IR/GlobalAlias.h>
 #include <llvm/IR/IRBuilder.h>
-#include <llvm/IR/ValueHandle.h>
 #include <llvm/Support/CBindingWrapping.h>
 
 #include "ValueCache.h"
