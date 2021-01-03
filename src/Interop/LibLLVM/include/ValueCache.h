@@ -1,7 +1,6 @@
 #ifndef _VALUECACHE_H_
 #define _VALUECACHE_H_
 
-#include "llvm/IR/ValueHandle.h"
 #include "llvm/IR/ValueMap.h"
 #include "libllvm-c/ValueBindings.h"
 
