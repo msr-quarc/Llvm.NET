@@ -7,6 +7,7 @@ variables:
 
 stages:
 - stage: Native
+  displayName: "Build Native components"
   jobs:
   - job: Build
     strategy:
@@ -27,6 +28,7 @@ stages:
       displayName: 'Run Build-Xplat.ps1 script'
 
 - stage: Llvm_NET
+  displayName: "Build Llvm.NET"
   condition: succeeded()
   jobs:
   - job: Build
@@ -39,9 +41,9 @@ stages:
 
     steps:
     - pwsh: ./Build-Source.ps1
-      displayName: 'Run Build-Source.ps1 script (Windows Only)'
+      displayName: 'Run Build-Source.ps1 script'
     - pwsh: ./Invoke-UnitTests.ps1
-      displayName: 'Run Invoke-UnitTests.ps1 script (Windows Only)'
+      displayName: 'Run Invoke-UnitTests.ps1 script'
       condition: succeeded()
 
 - stage: Publish
