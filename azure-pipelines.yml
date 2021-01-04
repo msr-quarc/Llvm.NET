@@ -1,36 +1,56 @@
 variables:
   Drops.Dir: $(Build.ArtifactStagingDirectory)/drops
   Drop.Native: $(System.DefaultWorkingDirectory)/xplat
-  Output.Llvm: "false"
-  Build.Llvm: "false"
+#   Build.Config: "Release" -> Defined on pipeline.
+#   Output.Llvm: "false" -> Defined on pipeline.
+#   Build.Llvm: "false" -> Defined on pipeline.
 
-jobs:
-- job: Build
-  strategy:
-    matrix:
-      linux:
-        imageName: 'ubuntu-latest'
-      mac:
-        imageName: 'macOS-latest'
-      windows:
-        imageName: 'windows-latest'
-  pool: 
-    vmImage: $(imageName)
+stages:
+- stage: Build LibLlvm Interop
+    jobs:
+    - job: Build
+    strategy:
+        matrix:
+        linux:
+            imageName: 'ubuntu-latest'
+        mac:
+            imageName: 'macOS-latest'
+        windows:
+            imageName: 'windows-latest'
+    pool: 
+        vmImage: $(imageName)
 
-  timeoutInMinutes: 240
+    timeoutInMinutes: 240
 
-  steps:
-  - pwsh: ./Build-Xplat.ps1
-    displayName: 'Run Build-Xplat.ps1 script'
-  - pwsh: ./Build-Source.ps1
-    displayName: 'Run Build-Source.ps1 script (Windows Only)'
-    condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
-  - pwsh: ./Invoke-UnitTests.ps1
-    displayName: 'Run Invoke-UnitTests.ps1 script (Windows Only)'
-    condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: Ubiquity.NET.Llvm'
-    condition: succeededOrFailed()
-    inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: Ubiquity.NET.Llvm
+    steps:
+    - pwsh: ./Build-Xplat.ps1
+        displayName: 'Run Build-Xplat.ps1 script'
+
+- stage: Build Llvm.NET
+    condition: succeeded()
+    jobs:
+    - job: Build
+    strategy:
+        matrix:
+        windows:
+            imageName: 'windows-latest'
+    pool: 
+        vmImage: $(imageName)
+
+    steps:
+    - pwsh: ./Build-Source.ps1
+        displayName: 'Run Build-Source.ps1 script (Windows Only)'
+    - pwsh: ./Invoke-UnitTests.ps1
+        displayName: 'Run Invoke-UnitTests.ps1 script (Windows Only)'
+        condition: succeeded()
+
+- stage: Publish Artifacts
+    jobs:
+    - job: Publish
+    steps:
+    - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: Ubiquity.NET.Llvm'
+        condition: succeededOrFailed()
+        inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            artifactName: Ubiquity.NET.Llvm
