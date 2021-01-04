@@ -6,7 +6,7 @@ variables:
 #   Build.Llvm: "false" -> Defined on pipeline.
 
 stages:
-- stage: Build LibLlvm Interop
+- stage: Native
   jobs:
   - job: Build
     strategy:
@@ -26,7 +26,7 @@ stages:
     - pwsh: ./Build-Xplat.ps1
       displayName: 'Run Build-Xplat.ps1 script'
 
-- stage: Build Llvm.NET
+- stage: Llvm_NET
   condition: succeeded()
   jobs:
   - job: Build
@@ -44,7 +44,7 @@ stages:
       displayName: 'Run Invoke-UnitTests.ps1 script (Windows Only)'
       condition: succeeded()
 
-- stage: Publish Artifacts
+- stage: Publish
   jobs:
   - job: Publish
     steps:
