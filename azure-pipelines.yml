@@ -7,41 +7,71 @@ variables:
 #   Build.Llvm: "false" -> Defined on pipeline.
 
 stages:
-- stage: Native
-  displayName: "Build Native components"
+- stage: Win_Native
+  displayName: "Build Windows Native components"
+  dependsOn: []
   jobs:
   - job: Build
-    strategy:
-      matrix:
-        linux:
-          imageName: 'ubuntu-latest'
-        mac:
-          imageName: 'macOS-latest'
-        windows:
-          imageName: 'windows-latest'
     pool: 
-      vmImage: $(imageName)
+      vmImage: 'windows-latest'
 
     timeoutInMinutes: 240
 
     steps:
     - pwsh: ./Build-Xplat.ps1
       displayName: 'Run Build-Xplat.ps1 script'
-    - task: CopyFiles@2
+    - task: PublishPipelineArtifact@1
       inputs:
-        SourceFolder: '$(Drop.Native)'
-        Contents: '**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/xplat'
-    - task: CopyFiles@2
-      condition: eq(variables['Agent.OS'], 'Windows_NT')
+        targetPath: '$(Drop.Native)/win-x64'
+        artifact: 'win-x64'
+        publishLocation: 'pipeline'
+    - task: PublishPipelineArtifact@1
       inputs:
-        SourceFolder: '$(Llvm.Includes)'
-        Contents: '**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/include'
+        targetPath: '$(Llvm.Includes)'
+        artifact: 'llvm_include'
+        publishLocation: 'pipeline'
+
+- stage: Linux_Native
+  displayName: "Build Linux Native components"
+  dependsOn: []
+  jobs:
+  - job: Build
+    pool: 
+      vmImage: 'ubuntu-latest'
+
+    timeoutInMinutes: 240
+
+    steps:
+    - pwsh: ./Build-Xplat.ps1
+      displayName: 'Run Build-Xplat.ps1 script'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Drop.Native)/linux-x64'
+        artifact: 'linux-x64'
+        publishLocation: 'pipeline'
+
+- stage: OsX_Native
+  displayName: "Build Os X Native components"
+  dependsOn: []
+  jobs:
+  - job: Build
+    pool: 
+      vmImage: 'macOS-latest'
+
+    timeoutInMinutes: 240
+
+    steps:
+    - pwsh: ./Build-Xplat.ps1
+      displayName: 'Run Build-Xplat.ps1 script'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Drop.Native)/osx-x64'
+        artifact: 'osx-x64'
+        publishLocation: 'pipeline'
 
 - stage: Llvm_NET
   displayName: "Build Llvm.NET"
-  condition: succeeded()
+  dependsOn: ['Win_Native', 'Linux_Native', 'OsX_Native']
   jobs:
   - job: Build
     strategy:
@@ -52,37 +82,31 @@ stages:
       vmImage: $(imageName)
 
     steps:
-    - task: CopyFiles@2
+    - task: DownloadPipelineArtifact@2
       inputs:
-        SourceFolder: '$(Build.ArtifactStagingDirectory)/xplat'
-        Contents: '**'
-        TargetFolder: '$(Drop.Native)'
-    - task: CopyFiles@2
+        buildType: 'current'
+        artifactName: 'win-x64'
+        targetPath: '$(Drop.Native)/win-x64'
+    - task: DownloadPipelineArtifact@2
       inputs:
-        SourceFolder: '$(Build.ArtifactStagingDirectory)/include'
-        Contents: '**'
-        TargetFolder: '$(Llvm.Includes)'
+        buildType: 'current'
+        artifactName: 'linux-x64'
+        targetPath: '$(Drop.Native)/linux-x64'
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'osx-x64'
+        targetPath: '$(Drop.Native)/osx-x64'
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'llvm_include'
+        targetPath: '$(Llvm.Includes)'
     - pwsh: ./Build-Source.ps1
       displayName: 'Run Build-Source.ps1 script'
     - pwsh: ./Invoke-UnitTests.ps1
       displayName: 'Run Invoke-UnitTests.ps1 script'
       condition: succeeded()
-    - task: DeleteFiles@1
-      inputs:
-        SourceFolder: '$(Build.ArtifactStagingDirectory)/xplat'
-        Contents: '**'
-        RemoveSourceFolder: true
-    - task: DeleteFiles@1
-      inputs:
-        SourceFolder: '$(Build.ArtifactStagingDirectory)/include'
-        Contents: '**'
-        RemoveSourceFolder: true
-
-- stage: Publish
-  condition: succeededOrFailed()
-  jobs:
-  - job: Publish
-    steps:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: Ubiquity.NET.Llvm'
       inputs:
