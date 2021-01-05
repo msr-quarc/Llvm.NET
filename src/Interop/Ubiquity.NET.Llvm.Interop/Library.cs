@@ -121,11 +121,11 @@ namespace Ubiquity.NET.Llvm.Interop
 
             // TODO: support other non-windows runtimes via .NET CORE
             var osArch = 
-                RuntimeInformation.IsOsPlatform(OSPlatform.Windows)
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                 ? "win-x64"
-                : RuntimeInformation.IsOsPlatform(OSPlatform.Linux)
+                : RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
                 ? "linux-x64"
-                : RuntimeInformation.IsOsPlatform(OSPlatform.OSX)
+                : RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
                 ? "osx-x64"
                 : "unknown";
             string runTimePath = Path.Combine( "runtimes", osArch, "native" );
