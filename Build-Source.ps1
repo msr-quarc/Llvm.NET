@@ -10,11 +10,11 @@ try
         return
     }
 
-    .\Build-Interop.ps1
+    .\Build-Interop.ps1 -Configuration $env:BUILD_CONFIG
 
     Remove-Item -Force -Recurse -Path (Join-Path $buildInfo["BuildOutputPath"] bin)
 
-    .\Build-DotNet.ps1
+    .\Build-DotNet.ps1 -Configuration $env:BUILD_CONFIG
 
     .\Pack-NuGet.ps1
 }

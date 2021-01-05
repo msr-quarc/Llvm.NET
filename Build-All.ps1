@@ -31,6 +31,8 @@ try
 
     md $buildInfo['NuGetOutputPath'] -ErrorAction SilentlyContinue | Out-Null
 
+    $env:BUILD_CONFIG = $Configuration
+
     if($BuildSource)
     {
         .\Build-Xplat.ps1

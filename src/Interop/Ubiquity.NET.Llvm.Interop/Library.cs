@@ -8,8 +8,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Threading;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 using Ubiquity.NET.Llvm.Interop.Properties;
 
@@ -120,7 +120,7 @@ namespace Ubiquity.NET.Llvm.Interop
             var paths = new List<string>( );
 
             // TODO: support other non-windows runtimes via .NET CORE
-            var osArch = 
+            var osArch =
                 RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                 ? "win-x64"
                 : RuntimeInformation.IsOSPlatform(OSPlatform.Linux)

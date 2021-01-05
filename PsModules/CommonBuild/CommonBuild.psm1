@@ -405,7 +405,7 @@ function Invoke-MSBuild([string]$project, [hashtable]$properties, $targets, $log
     . $msbuild.FullPath @msbuildArgs
     if($LASTEXITCODE -ne 0)
     {
-        Write-Error "Error running msbuild: $LASTEXITCODE"
+        throw "Error running msbuild for '$project': $LASTEXITCODE"
     }
 }
 
