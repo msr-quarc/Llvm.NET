@@ -1,6 +1,7 @@
 variables:
   Drops.Dir: $(Build.ArtifactStagingDirectory)/drops
   Drop.Native: $(System.DefaultWorkingDirectory)/xplat
+  Llvm.Includes: $(System.DefaultWorkingDirectory)/llvm/include
 #   Build.Config: "Release" -> Defined on pipeline.
 #   Output.Llvm: "false" -> Defined on pipeline.
 #   Build.Llvm: "false" -> Defined on pipeline.
@@ -26,6 +27,16 @@ stages:
     steps:
     - pwsh: ./Build-Xplat.ps1
       displayName: 'Run Build-Xplat.ps1 script'
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Drop.Native)'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/xplat'
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Llvm.Includes)'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/include'
 
 - stage: Llvm_NET
   displayName: "Build Llvm.NET"
@@ -40,19 +51,39 @@ stages:
       vmImage: $(imageName)
 
     steps:
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Build.ArtifactStagingDirectory)/xplat'
+        Contents: '**'
+        TargetFolder: '$(Drop.Native)'
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Build.ArtifactStagingDirectory)/include'
+        Contents: '**'
+        TargetFolder: '$(Llvm.Includes)'
     - pwsh: ./Build-Source.ps1
       displayName: 'Run Build-Source.ps1 script'
     - pwsh: ./Invoke-UnitTests.ps1
       displayName: 'Run Invoke-UnitTests.ps1 script'
       condition: succeeded()
+    - task: DeleteFiles@1
+      inputs:
+        SourceFolder: '$(Build.ArtifactStagingDirectory)/xplat'
+        Contents: '**'
+        RemoveSourceFolder: true
+    - task: DeleteFiles@1
+      inputs:
+        SourceFolder: '$(Build.ArtifactStagingDirectory)/include'
+        Contents: '**'
+        RemoveSourceFolder: true
 
 - stage: Publish
+  condition: succeededOrFailed()
   jobs:
   - job: Publish
     steps:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: Ubiquity.NET.Llvm'
-      condition: succeededOrFailed()
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         artifactName: Ubiquity.NET.Llvm
