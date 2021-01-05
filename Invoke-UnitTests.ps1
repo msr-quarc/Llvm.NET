@@ -15,12 +15,12 @@ try
     Invoke-DotNetTest $buildInfo 'Samples\Kaleidoscope\Kaleidoscope.Tests\Kaleidoscope.Tests.csproj'
 
     Write-Information 'Running sample app for .NET Core'
-    pushd (Join-path $buildInfo['BuildOutputPath'] bin\CodeGenWithDebugInfo\Release\netcoreapp3.1)
+    pushd (Join-path Samples CodeGenWithDebugInfo)
     try
     {
-        dotnet CodeGenWithDebugInfo.dll M3 'Support Files\test.c' $buildInfo['TestResultsPath']
+        dotnet run M3 'Support Files\test.c' $buildInfo['TestResultsPath']
         if ($LASTEXITCODE -ne 0) {
-            throw "'dotnet CodeGenWithDebugInfo.dll' exited with code: $LASTEXITCODE"
+            throw "'dotnet run' of CodeGenWithDebugInfo exited with code: $LASTEXITCODE"
         }
     }
     finally
