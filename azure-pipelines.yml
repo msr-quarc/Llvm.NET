@@ -74,12 +74,8 @@ stages:
   dependsOn: ['Win_Native', 'Linux_Native', 'OsX_Native']
   jobs:
   - job: Build
-    strategy:
-      matrix:
-        windows:
-          imageName: 'windows-latest'
     pool:
-      vmImage: $(imageName)
+      vmImage: 'windows-latest'
 
     steps:
     - task: DownloadPipelineArtifact@2
@@ -104,11 +100,35 @@ stages:
         targetPath: '$(Llvm.Includes)'
     - pwsh: ./Build-Source.ps1
       displayName: 'Run Build-Source.ps1 script'
-    - pwsh: ./Invoke-UnitTests.ps1
-      displayName: 'Run Invoke-UnitTests.ps1 script'
+    - pwsh: ./Invoke-InteropTests.ps1
+      displayName: 'Run Invoke-InteropTests.ps1 script'
       condition: succeeded()
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: Ubiquity.NET.Llvm'
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        PathtoPublish: '$(Drops.Dir)'
         artifactName: Ubiquity.NET.Llvm
+        
+- stage: Test
+  displayName: "Test Packages"
+  dependsOn: ['Llvm_NET']
+  jobs:
+  - job: Test
+    strategy:
+      matrix:
+        linux:
+          imageName: 'ubuntu-latest'
+        osx:
+          imageName: 'macOs-latest'
+        windows:
+          imageName: 'windows-latest'
+    pool:
+      vmImage: $(imageName)
+    
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'Ubiquity.NET.Llvm'
+        targetPath: '$(Pipeline.Workspace)/BuildOutput'
+    - pwsh: ./Invoke-UnitTests.ps1
