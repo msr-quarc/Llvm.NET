@@ -18,6 +18,8 @@ stages:
     timeoutInMinutes: 240
 
     steps:
+    - checkout: self
+      submodules: true
     - pwsh: ./Build-Xplat.ps1
       displayName: 'Run Build-Xplat.ps1 script'
     - task: PublishPipelineArtifact@1
@@ -42,6 +44,8 @@ stages:
     timeoutInMinutes: 240
 
     steps:
+    - checkout: self
+      submodules: true
     - pwsh: ./Build-Xplat.ps1
       displayName: 'Run Build-Xplat.ps1 script'
     - task: PublishPipelineArtifact@1
@@ -61,6 +65,8 @@ stages:
     timeoutInMinutes: 240
 
     steps:
+    - checkout: self
+      submodules: true
     - pwsh: ./Build-Xplat.ps1
       displayName: 'Run Build-Xplat.ps1 script'
     - task: PublishPipelineArtifact@1
@@ -78,6 +84,7 @@ stages:
       vmImage: 'windows-latest'
 
     steps:
+    - checkout: self
     - task: DownloadPipelineArtifact@2
       inputs:
         buildType: 'current'
@@ -126,6 +133,7 @@ stages:
       vmImage: $(imageName)
     
     steps:
+    - checkout: self
     - task: DownloadPipelineArtifact@2
       inputs:
         buildType: 'current'
