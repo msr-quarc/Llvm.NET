@@ -33,6 +33,7 @@ stages:
         Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/xplat'
     - task: CopyFiles@2
+      condition: eq(variables['Agent.OS'], 'Windows_NT')
       inputs:
         SourceFolder: '$(Llvm.Includes)'
         Contents: '**'
