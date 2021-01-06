@@ -87,11 +87,6 @@ if ($env:OUTPUT_LLVM -ne "true" -and $env:BUILD_LLVM -ne "true") {
 } else {
     if ($env:BUILD_LLVM -eq "true") {
         $destBase = (Join-Path $PSScriptRoot "llvm")
-
-        if (Test-Path $destBase) {
-            Write-Verbose "Cleaning out the old data from $($destbase)"
-            Remove-Item -Path $destbase -Recurse -Force | Out-Null
-        }
     } else {
         # Copy to build output
         $destBase = Join-Path $buildInfo["ArtifactDrops"] $plat
@@ -130,7 +125,7 @@ if ($env:OUTPUT_LLVM -ne "true" -and $env:BUILD_LLVM -ne "true") {
     $incDest = (Join-Path ($destbase) "include")
     $incFilter = @( '*.h', '*.gen', '*.def', '*.inc' )
     Write-Verbose "Moving headers from $($incSource) to $($incDest)"
-    Move-Tree $incSource $incDest ($incFilter)
+    Copy-Tree $incSource $incDest ($incFilter)
 
     $cfgSource = (Join-Path $BuildRoot ($BuildName) "NATIVE" "include" "llvm" "Config")
     $cfgDest = (Join-Path ($destbase) "include" "llvm" "Config")
