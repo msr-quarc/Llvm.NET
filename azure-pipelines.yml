@@ -139,9 +139,10 @@ stages:
     steps:
     - checkout: self
       fetchDepth: 1
-    - task: DownloadPipelineArtifact@2
+    - task: DownloadBuildArtifacts@0
       inputs:
         buildType: 'current'
+        downloadType: 'single'
         artifactName: 'Ubiquity.NET.Llvm'
-        targetPath: '$(System.DefaultWorkingDirectory)/BuildOutput'
+        downloadPath: '$(System.DefaultWorkingDirectory)/BuildOutput'
     - pwsh: ./Invoke-UnitTests.ps1
