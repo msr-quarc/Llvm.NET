@@ -26,6 +26,10 @@ function Get-RelativePath ([string]$base, [string]$path)
 
 function Copy-Tree ([string]$source, [string]$dest, [string[]]$filter = @("*"), [string[]]$exclude = @())
 {
+    if (!(Test-Path $source)) {
+        Write-Warning "Directory '$source' not found. Skipping copy..."
+        return
+    }
     $items = Get-ChildItem $source -Recurse -Include $filter -Exclude $exclude | %{ Get-RelativePath $source $_ }
     ForEach ($itemSrc in $items)
     {
@@ -36,12 +40,16 @@ function Copy-Tree ([string]$source, [string]$dest, [string[]]$filter = @("*"), 
             Write-Verbose "Creating directory $($destDir)"
             New-Item -Path $destDir -ItemType "directory" -Force
         }
-        Copy-Item -Path (Join-Path $source $itemSrc) -Destination $itemDest -Force
+        Copy-Item -Path (Join-Path $source $itemSrc) -Destination $itemDest -Verbose -Force
     }
 }
 
 function Move-Tree ([string]$source, [string]$dest, [string[]]$filter = @("*"), [string[]]$exclude = @())
 {
+    if (!(Test-Path $source)) {
+        Write-Warning "Directory '$source' not found. Skipping copy..."
+        return
+    }
     $items = Get-ChildItem $source -Recurse -Include $filter -Exclude $exclude -Attributes !Directory | %{ Get-RelativePath $source $_ }
     ForEach ($itemSrc in $items)
     {
