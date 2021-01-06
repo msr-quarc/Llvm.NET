@@ -37,10 +37,11 @@ target_link_directories(Ubiquity.NET.LibLlvm BEFORE PRIVATE "../../../llvm/lib")
 
 add_compile_definitions("NDEBUG" "_USRDLL" "LIBLLVM_EXPORTS" "LibLLVM_EXPORTS")
 add_compile_definitions("_ITERATOR_DEBUG_LEVEL=0")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 
 if (WIN32)
     target_sources(Ubiquity.NET.LibLlvm PUBLIC "EXPORTS.g.DEF")
+else (WIN32)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 endif()
 
 if (APPLE)
