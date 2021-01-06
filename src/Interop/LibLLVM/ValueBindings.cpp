@@ -1,4 +1,3 @@
-#include "libllvm-c/ValueBindings.h"
 #include <llvm/IR/Constant.h>
 #include <llvm/IR/Comdat.h>
 #include <llvm/IR/Module.h>
@@ -10,6 +9,7 @@
 
 #include "ValueCache.h"
 
+#include "libllvm-c/ValueBindings.h"
 
 using namespace llvm;
 
