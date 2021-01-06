@@ -28,8 +28,6 @@ enable_testing()
 
 add_library(Ubiquity.NET.LibLlvm SHARED "")
 
-set_target_properties(Ubiquity.NET.LibLlvm PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-
 target_include_directories(Ubiquity.NET.LibLlvm PRIVATE "../../../llvm/include")
 target_include_directories(Ubiquity.NET.LibLlvm PRIVATE "../../../llvm/lib/ExecutionEngine/Orc")
 target_include_directories(Ubiquity.NET.LibLlvm PRIVATE "include")
@@ -48,7 +46,7 @@ if (APPLE)
     # Explicitly add a link to libz and libncurses
     target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z" "ncurses")
 
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 endif()
 
 target_sources(Ubiquity.NET.LibLlvm PRIVATE 
