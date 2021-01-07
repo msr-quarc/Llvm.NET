@@ -10,12 +10,6 @@ try
     . .\buildutils.ps1
     $buildInfo = Initialize-BuildEnvironment
 
-    $packProperties = @{ version=$($buildInfo['PackageVersion'])
-                         llvmversion=$($buildInfo['LlvmVersion'])
-                         buildbinoutput=(Join-path $($buildInfo['BuildOutputPath']) 'bin')
-                         configuration=$Configuration
-                       }
-
     $msBuildProperties = @{ Configuration = $Configuration
                             LlvmVersion = $buildInfo['LlvmVersion']
                           }
