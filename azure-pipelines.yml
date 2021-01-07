@@ -144,5 +144,6 @@ stages:
         buildType: 'current'
         downloadType: 'single'
         artifactName: 'Ubiquity.NET.Llvm'
+        itemPattern: 'NuGet/*'
         downloadPath: '$(System.DefaultWorkingDirectory)/BuildOutput'
     - pwsh: ./Invoke-UnitTests.ps1
