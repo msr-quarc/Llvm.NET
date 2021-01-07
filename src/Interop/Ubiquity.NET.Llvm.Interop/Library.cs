@@ -144,7 +144,7 @@ namespace Ubiquity.NET.Llvm.Interop
             FatalErrorHandlerDelegate = new Lazy<LLVMFatalErrorHandler>( ( ) => FatalErrorHandler, LazyThreadSafetyMode.PublicationOnly );
             LLVMInstallFatalErrorHandler( FatalErrorHandlerDelegate.Value );
             Interlocked.Exchange( ref CurrentInitializationState, ( int )InitializationState.Initialized );
-            return new Library( hLibLLVM );
+            return new Library( IntPtr.Zero );
         }
 
         // TODO: Figure out how to read targets.def to get the full set of target architectures
