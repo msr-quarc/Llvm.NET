@@ -119,24 +119,6 @@ namespace Ubiquity.NET.Llvm.Interop
             string packageRoot = Path.GetFullPath( Path.Combine( thisModulePath, "..", ".." ) );
             var paths = new List<string>( );
 
-            // TODO: support other non-windows runtimes via .NET CORE
-            var osArch =
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                ? "win-x64"
-                : RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
-                ? "linux-x64"
-                : RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
-                ? "osx-x64"
-                : "unknown";
-            string runTimePath = Path.Combine( "runtimes", osArch, "native" );
-
-            // .NET core apps will actually run with references directly from the NuGet install
-            // but full framework apps (including unit tests will have CopyLocal applied)
-            paths.Add( Path.Combine( packageRoot, runTimePath ) );
-            paths.Add( Path.Combine( thisModulePath, runTimePath ) );
-            paths.Add( thisModulePath );
-            IntPtr hLibLLVM = LoadNativeLibrary( "Ubiquity.NET.LibLlvm.dll", paths );
-
             // Verify the version of LLVM in LibLLVM
             LibLLVMGetVersionInfo( out LibLLVMVersionInfo versionInfo );
             if( versionInfo.Major != VersionMajor
