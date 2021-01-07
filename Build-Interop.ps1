@@ -78,7 +78,7 @@ try
 
         Write-Information "Building Ubiquity.NET.Llvm.Interop"
         $interopSlnBinLog = Join-Path $buildInfo['BinLogsPath'] Interop.sln.binlog
-        Invoke-MSBuild -Targets 'Restore;Build' -Project 'src\Interop\Interop.sln' -Properties $msBuildProperties -LoggerArgs ($buildInfo['MsBuildLoggerArgs'] + @("/bl:$interopSlnBinLog") )
+        Invoke-MSBuild -Targets 'Restore;Build' -Project 'src\Interop\Ubiquity.NET.Llvm.Interop\Ubiquity.NET.Llvm.Interop.csproj' -Properties $msBuildProperties -LoggerArgs ($buildInfo['MsBuildLoggerArgs'] + @("/bl:$interopSlnBinLog") )
     }
     else
     {
