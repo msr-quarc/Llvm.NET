@@ -15,8 +15,6 @@ try
     Remove-Item -Force -Recurse -Path (Join-Path $buildInfo["BuildOutputPath"] bin)
 
     .\Build-DotNet.ps1 -Configuration $env:BUILD_CONFIG
-
-    .\Pack-NuGet.ps1
 }
 catch
 {

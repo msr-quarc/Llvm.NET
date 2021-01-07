@@ -1,9 +1,8 @@
 variables:
-  Drops.Dir: $(Build.ArtifactStagingDirectory)/drops
+  Drop.NuGet: $(System.DefaultWorkingDirectory)/BuildOutput/NuGet
   Drop.Native: $(System.DefaultWorkingDirectory)/xplat
   Llvm.Includes: $(System.DefaultWorkingDirectory)/llvm/include
 #   Build.Config: "Release" -> Defined on pipeline.
-#   Output.Llvm: "false" -> Defined on pipeline.
 #   Build.Llvm: "false" -> Defined on pipeline.
 
 stages:
@@ -117,7 +116,7 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: Ubiquity.NET.Llvm'
       inputs:
-        PathtoPublish: '$(Drops.Dir)'
+        PathtoPublish: '$(Drop.NuGet)'
         artifactName: Ubiquity.NET.Llvm
         
 - stage: Test
@@ -143,5 +142,5 @@ stages:
       inputs:
         buildType: 'current'
         artifactName: 'Ubiquity.NET.Llvm'
-        targetPath: '$(System.DefaultWorkingDirectory)/BuildOutput'
+        targetPath: '$(System.DefaultWorkingDirectory)/BuildOutput/NuGet'
     - pwsh: ./Invoke-UnitTests.ps1

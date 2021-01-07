@@ -76,7 +76,7 @@ if ($buildInfo['Platform'] -eq [platform]::Windows) {
     $plat = "mac"
 }
 
-if ($env:OUTPUT_LLVM -ne "true" -and $env:BUILD_LLVM -ne "true") {
+if ($env:BUILD_LLVM -ne "true") {
     # Copy from cached headers.
     $basePath = Join-Path $PSScriptRoot llvm
     Copy-Item -Force -Recurse (Join-Path $basePath xplat $plat include) $basePath -Verbose
@@ -93,12 +93,7 @@ if ($env:OUTPUT_LLVM -ne "true" -and $env:BUILD_LLVM -ne "true") {
 
     Copy-Item -Force -Recurse (Join-Path $basePath xplat ExecutionEngine) (Join-Path $basePath lib) -Verbose
 } else {
-    if ($env:BUILD_LLVM -eq "true") {
-        $destBase = (Join-Path $PSScriptRoot "llvm")
-    } else {
-        # Copy to build output
-        $destBase = Join-Path $buildInfo["ArtifactDrops"] $plat
-    }
+    $destBase = (Join-Path $PSScriptRoot "llvm")
 
     if (Test-Path $destBase) {
         Write-Verbose "Cleaning out the old data from $($destbase)"

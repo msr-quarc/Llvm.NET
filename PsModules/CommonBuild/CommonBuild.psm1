@@ -83,12 +83,6 @@ function Get-DefaultBuildPaths([string]$repoRoot)
         ToolsPath = Join-Path $repoRoot 'Tools'
     }
 
-    if ($env:DROPS_DIR) {
-        $buildPaths["ArtifactDrops"] = $env:DROPS_DIR
-    } else {
-        $buildPaths["ArtifactDrops"] = Join-Path $buildOutputPath drops
-    }
-
     if ($env:DROP_NATIVE) {
         $buildPaths["NativeXplat"] = $env:DROP_NATIVE
     } else {
