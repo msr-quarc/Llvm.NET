@@ -8,9 +8,6 @@ try
         return
     }
 
-    $env:LD_DEBUG = "all"
-    $env:DYLD_PRINT_LIBRARIES_POST_LAUNCH = 1
-
     Write-Information 'Running Core library tests as x64'
     Invoke-DotNetTest $buildInfo 'src\Ubiquity.NET.Llvm.Tests\Ubiquity.NET.Llvm.Tests.csproj'
 
