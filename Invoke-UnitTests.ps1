@@ -8,6 +8,9 @@ try
         return
     }
 
+    Write-Information 'Running Interop tests as x64'
+    Invoke-DotNetTest $buildInfo 'src\Interop\InteropTests\InteropTests.csproj'
+
     Write-Information 'Running Core library tests as x64'
     Invoke-DotNetTest $buildInfo 'src\Ubiquity.NET.Llvm.Tests\Ubiquity.NET.Llvm.Tests.csproj'
 

@@ -12,8 +12,6 @@ try
 
     .\Build-Interop.ps1 -Configuration $env:BUILD_CONFIG
 
-    Remove-Item -Force -Recurse -Path (Join-Path $buildInfo["BuildOutputPath"] bin)
-
     .\Build-DotNet.ps1 -Configuration $env:BUILD_CONFIG
 }
 catch

@@ -110,9 +110,6 @@ stages:
         targetPath: '$(Llvm.Includes)'
     - pwsh: ./Build-Source.ps1
       displayName: 'Run Build-Source.ps1 script'
-    - pwsh: ./Invoke-InteropTests.ps1
-      displayName: 'Run Invoke-InteropTests.ps1 script'
-      condition: succeeded()
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: Ubiquity.NET.Llvm'
       inputs:
