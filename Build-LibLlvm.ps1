@@ -4,6 +4,7 @@ Param(
 
 pushd $PSScriptRoot
 $oldPath = $env:Path
+$Script:ResetCompiler = $false
 try
 {
     . .\buildutils.ps1
