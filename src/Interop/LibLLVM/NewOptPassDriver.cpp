@@ -13,6 +13,7 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#include "NewOptPassDriver.h"
 #include "llvm/ADT/StringRef.h"
 #include "llvm/Analysis/AliasAnalysis.h"
 #include "llvm/Analysis/CGSCCPassManager.h"
@@ -29,7 +30,6 @@
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Support/ToolOutputFile.h"
 #include "llvm/Target/TargetMachine.h"
-#include "llvm-c/TargetMachine.h"
 
 using namespace llvm;
 
@@ -55,7 +55,7 @@ LLVMBool LLVMRunPassPipeline( LLVMContextRef context
                             , LLVMModuleRef M
                             , LLVMTargetMachineRef TM
                             , char const* passPipeline
-                            // , LLVMOptVerifierKind VK
+                            , LLVMOptVerifierKind VK
                             , bool ShouldPreserveAssemblyUseListOrder
                             , bool ShouldPreserveBitcodeUseListOrder
                             )
@@ -86,18 +86,18 @@ LLVMBool LLVMRunPassPipeline( LLVMContextRef context
     PB.crossRegisterProxies( LAM, FAM, CGAM, MAM );
 
     ModulePassManager MPM( DebugPM );
-    // if( VK > LLVMOptVerifierKindNone )
-    // {
-    //     MPM.addPass( VerifierPass( ) );
-    // }
+    if( VK > LLVMOptVerifierKindNone )
+    {
+        MPM.addPass( VerifierPass( ) );
+    }
 
-    // if( !PB.parsePassPipeline( MPM, passPipeline, VK == LLVMOptVerifierKindVerifyEachPass, DebugPM ) )
-    // {
-    //     return false;
-    // }
+    if( !PB.parsePassPipeline( MPM, passPipeline, VK == LLVMOptVerifierKindVerifyEachPass, DebugPM ) )
+    {
+        return false;
+    }
 
-    // if( VK > LLVMOptVerifierKindNone )
-    //     MPM.addPass( VerifierPass( ) );
+    if( VK > LLVMOptVerifierKindNone )
+        MPM.addPass( VerifierPass( ) );
 
     // Now that we have all of the passes ready, run them.
     MPM.run( *unwrap(M), MAM );

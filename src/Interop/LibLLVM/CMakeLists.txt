@@ -37,10 +37,12 @@ target_link_directories(Ubiquity.NET.LibLlvm BEFORE PRIVATE "../../../llvm/lib")
 
 add_compile_definitions("NDEBUG" "_USRDLL" "LIBLLVM_EXPORTS" "LibLLVM_EXPORTS")
 add_compile_definitions("_ITERATOR_DEBUG_LEVEL=0")
+add_compile_definitions("__STDC_CONSTANT_MACROS" "__STDC_FORMAT_MACROS" "__STDC_LIMIT_MACROS")
 
 if (WIN32)
     target_sources(Ubiquity.NET.LibLlvm PUBLIC "EXPORTS.g.DEF")
 else (WIN32)
+    add_compile_definitions("_GNU_SOURCE")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions")
 endif()
 
@@ -57,12 +59,10 @@ target_sources(Ubiquity.NET.LibLlvm PRIVATE
     "ObjectFileBindings"
     "InlinedExports" 
     "IRBindings" 
-    "LegacyPassManagerOpt" 
     "LibLlvmOrcJitBindings"
     "MetadataBindings" 
     "PassManagerBindings" 
     "ModuleBindings" 
-    "NewOptPassDriver" 
     "TripleBindings" 
     "ValueBindings")
 

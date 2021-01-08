@@ -24,7 +24,7 @@
 #include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/Analysis/TargetTransformInfo.h"
 #include "llvm/Bitcode/BitcodeWriterPass.h"
-#include "llvm/CodeGen/CommandFlags.inc"
+#include "llvm/CodeGen/CommandFlags.h"
 #include "llvm/CodeGen/TargetPassConfig.h"
 #include "llvm/IR/DataLayout.h"
 #include "llvm/IR/DebugInfo.h"
@@ -239,7 +239,7 @@ static void AddOptimizationPasses( legacy::PassManagerBase &MPM,
     else {
         Builder.Inliner = createAlwaysInlinerLegacyPass( );
     }
-    // Builder.DisableUnitAtATime = !UnitAtATime;
+    Builder.DisableUnitAtATime = !UnitAtATime;
     Builder.DisableUnrollLoops = ( DisableLoopUnrolling.getNumOccurrences( ) > 0 ) ?
         DisableLoopUnrolling : OptLevel == 0;
 
@@ -305,7 +305,7 @@ static TargetMachine* GetTargetMachine( Triple TheTriple, StringRef CPUStr,
 
     return TheTarget->createTargetMachine( TheTriple.getTriple( ), CPUStr,
         FeaturesStr, Options, getRelocModel( ),
-        CMModel.getValue(), GetCodeGenOptLevel( ) );
+        CMModel, GetCodeGenOptLevel( ) );
 }
 
 #ifdef LINK_POLLY_INTO_TOOLS
@@ -341,7 +341,7 @@ void LLVMInitializePassesForLegacyOpt( )
     initializePreISelIntrinsicLoweringLegacyPassPass( Registry );
     initializeGlobalMergePass( Registry );
     initializeInterleavedAccessPass( Registry );
-    initializeCFIInstrInserterPass( Registry );
+    initializeCountingFunctionInserterPass( Registry );
     initializeUnreachableBlockElimLegacyPassPass( Registry );
     initializeExpandReductionsPass( Registry );
 }
