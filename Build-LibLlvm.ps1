@@ -9,6 +9,16 @@ try
     . .\buildutils.ps1
     $buildInfo = Initialize-BuildEnvironment
 
+    if ($buildInfo['Platform'] -eq [platform]::Mac) {
+        # Apple Clang doesn't seem to support the linker options we need, namely '--start-group' and '--end-group'
+        # Force use of gcc/g++
+        $oldCC = $env:CC
+        $oldCXX = $env:CXX
+        $env:CC = "/usr/bin/gcc"
+        $env:CXX = "/usr/bin/g++"
+        $Script:ResetCompiler = $true
+    }
+
     # Need to invoke NuGet directly for restore of vcxproj as /t:Restore target doesn't support packages.config
     # and PackageReference isn't supported for native projects... [Sigh...]
     Write-Information "Restoring LibLLVM"
@@ -54,6 +64,10 @@ try
 }
 finally
 {
+    if ($Script:ResetCompiler) {
+        $env:CC = $oldCC
+        $env:CXX = $oldCXX
+    }
     popd
     $env:Path = $oldPath
 }
