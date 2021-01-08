@@ -1,12 +1,4 @@
 cmake_minimum_required(VERSION 3.0.0)
-
-if (APPLE)
-    # Apple clang doesn't seem to support '--start-group' and '--end-group' linker commands
-    # Force gcc/g++ instead
-    set(CMAKE_C_COMPILER "gcc")
-    set(CMAKE_CXX_COMPILER "g++")
-endif()
-
 project(Ubiquity.NET.LibLlvm VERSION 0.1.0)
 
 if(POLICY CMP0076)
