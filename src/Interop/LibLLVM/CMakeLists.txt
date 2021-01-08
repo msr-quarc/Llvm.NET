@@ -37,18 +37,11 @@ target_link_directories(Ubiquity.NET.LibLlvm BEFORE PRIVATE "../../../llvm/lib")
 
 add_compile_definitions("NDEBUG" "_USRDLL" "LIBLLVM_EXPORTS" "LibLLVM_EXPORTS")
 add_compile_definitions("_ITERATOR_DEBUG_LEVEL=0")
-add_compile_definitions("__STDC_CONSTANT_MACROS" "__STDC_FORMAT_MACROS" "__STDC_LIMIT_MACROS")
 
 if (WIN32)
     target_sources(Ubiquity.NET.LibLlvm PUBLIC "EXPORTS.g.DEF")
 else (WIN32)
-    add_compile_definitions("_GNU_SOURCE")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions")
-endif()
-
-if (APPLE)
-    # Explicitly add a link to libz and libncurses
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z" "ncurses")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions -pthread")
 endif()
 
 target_sources(Ubiquity.NET.LibLlvm PRIVATE 
@@ -65,6 +58,10 @@ target_sources(Ubiquity.NET.LibLlvm PRIVATE
     "ModuleBindings" 
     "TripleBindings" 
     "ValueBindings")
+
+if (NOT WIN32)
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-Wl,--start-group")
+endif()
 
 target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE
         "LLVMAArch64AsmParser"
@@ -212,6 +209,14 @@ target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE
         "LLVMXCoreInfo"
         "LLVMXRay"
     )
+
+if (NOT WIN32)
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-Wl,--end-group" "ncurses" "pthread")
+endif()
+
+if (APPLE)
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z")
+endif()
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
