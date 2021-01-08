@@ -543,11 +543,14 @@ function Get-GitHubTaggedRelease($org, $project, $tag)
     Get-GithubReleases $org $project | ?{$_.tag_name -eq $tag}
 }
 
-function Invoke-DotNetTest($buildInfo, $projectRelativePath)
+function Invoke-DotNetTest($buildInfo, $projectRelativePath, $configuration)
 {
+    if ([string]::IsNullOrEmpty($configuration)) {
+        $configuration = "Release"
+    }
     $testProj = Join-Path $buildInfo['RepoRootPath'] $projectRelativePath
     $runSettings = Join-Path $buildInfo['SrcRootPath'] 'x64.runsettings'
-    dotnet test $testProj -v m -s $runSettings --logger trx
+    dotnet test $testProj -v m -s $runSettings --logger trx -c $configuration
     if ($LASTEXITCODE -ne 0) {
         throw "'dotnet test $testproj' exited with code: $LASTEXITCODE"
     }

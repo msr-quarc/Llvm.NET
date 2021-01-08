@@ -9,13 +9,13 @@ try
     }
 
     Write-Information 'Running Interop tests as x64'
-    Invoke-DotNetTest $buildInfo 'src\Interop\InteropTests\InteropTests.csproj'
+    Invoke-DotNetTest $buildInfo 'src\Interop\InteropTests\InteropTests.csproj' $env:BUILD_CONFIG
 
     Write-Information 'Running Core library tests as x64'
-    Invoke-DotNetTest $buildInfo 'src\Ubiquity.NET.Llvm.Tests\Ubiquity.NET.Llvm.Tests.csproj'
+    Invoke-DotNetTest $buildInfo 'src\Ubiquity.NET.Llvm.Tests\Ubiquity.NET.Llvm.Tests.csproj' $env:BUILD_CONFIG
 
     Write-Information 'Running tests for Kaleidoscope Samples as x64'
-    Invoke-DotNetTest $buildInfo 'Samples\Kaleidoscope\Kaleidoscope.Tests\Kaleidoscope.Tests.csproj'
+    Invoke-DotNetTest $buildInfo 'Samples\Kaleidoscope\Kaleidoscope.Tests\Kaleidoscope.Tests.csproj' $env:BUILD_CONFIG
 
     Write-Information 'Running sample app for .NET Core'
     pushd (Join-path Samples CodeGenWithDebugInfo)
