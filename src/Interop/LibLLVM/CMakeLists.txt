@@ -42,7 +42,9 @@ if (NOT WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions -pthread")
 endif()
 
-target_sources(Ubiquity.NET.LibLlvm PUBLIC "EXPORTS.g.DEF")
+target_sources(Ubiquity.NET.LibLlvm PUBLIC 
+    "InlinedExports"
+    "EXPORTS.g.DEF")
 
 target_sources(Ubiquity.NET.LibLlvm PRIVATE 
     "AnalysisBindings" 
@@ -50,7 +52,6 @@ target_sources(Ubiquity.NET.LibLlvm PRIVATE
     "ContextBindings" 
     "DIBuilderBindings"
     "ObjectFileBindings"
-    "InlinedExports" 
     "IRBindings" 
     "LibLlvmOrcJitBindings"
     "MetadataBindings" 
@@ -207,11 +208,13 @@ target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE
     )
 
 if (NOT WIN32)
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "ncurses" "tinfo" "pthread")
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "ncurses" "pthread")
 endif()
 
 if (APPLE)
     target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z")
+elseif (UNIX)
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "tinfo")
 endif()
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
