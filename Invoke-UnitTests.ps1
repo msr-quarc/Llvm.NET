@@ -10,11 +10,7 @@ try
 
     if ($buildInfo['Platform'] -eq [platform]::Linux) {
         dotnet build 'src\Interop\InteropTests'
-        ldd -r ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
-    }
-    if ($buildInfo['Platform'] -eq [platform]::Mac) {
-        dotnet build 'src\Interop\InteropTests'
-        ldd -r ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.dylib
+        nm -u ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
     }
 
     Write-Information 'Running Interop tests as x64'
