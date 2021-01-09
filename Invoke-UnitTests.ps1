@@ -8,6 +8,15 @@ try
         return
     }
 
+    if ($buildInfo['Platform'] -eq [platform]::Linux) {
+        dotnet build 'src\Interop\InteropTests'
+        ldd -r ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
+    }
+    if ($buildInfo['Platform'] -eq [platform]::Mac) {
+        dotnet build 'src\Interop\InteropTests'
+        ldd -r ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.dylib
+    }
+
     Write-Information 'Running Interop tests as x64'
     Invoke-DotNetTest $buildInfo 'src\Interop\InteropTests\InteropTests.csproj' $env:BUILD_CONFIG
 
