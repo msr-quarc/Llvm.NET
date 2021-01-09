@@ -207,7 +207,7 @@ target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE
     )
 
 if (NOT WIN32)
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "curses" "pthread")
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "ncurses" "tinfo" "pthread")
 endif()
 
 if (APPLE)
