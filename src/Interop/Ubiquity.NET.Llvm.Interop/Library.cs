@@ -194,32 +194,32 @@ namespace Ubiquity.NET.Llvm.Interop
         {
             if( registrations.HasFlag( TargetRegistrations.Target ) )
             {
-                LLVMInitializeAllTargets( );
+                LLVMInitializeAllTargetsExport( );
             }
 
             if( registrations.HasFlag( TargetRegistrations.TargetInfo ) )
             {
-                LLVMInitializeAllTargetInfos( );
+                LLVMInitializeAllTargetInfosExport( );
             }
 
             if( registrations.HasFlag( TargetRegistrations.TargetMachine ) )
             {
-                LLVMInitializeAllTargetMCs( );
+                LLVMInitializeAllTargetMCsExport( );
             }
 
             if( registrations.HasFlag( TargetRegistrations.AsmPrinter ) )
             {
-                LLVMInitializeAllAsmPrinters( );
+                LLVMInitializeAllAsmPrintersExport( );
             }
 
             if( registrations.HasFlag( TargetRegistrations.Disassembler ) )
             {
-                LLVMInitializeAllDisassemblers( );
+                LLVMInitializeAllDisassemblersExport( );
             }
 
             if( registrations.HasFlag( TargetRegistrations.AsmParser ) )
             {
-                LLVMInitializeAllAsmParsers( );
+                LLVMInitializeAllAsmParsersExport( );
             }
         }
 
@@ -229,30 +229,30 @@ namespace Ubiquity.NET.Llvm.Interop
         {
             if( registrations.HasFlag( TargetRegistrations.Target ) )
             {
-                LLVMInitializeNativeTarget( );
+                LLVMInitializeNativeTargetExport( );
             }
 
             /* Not supported on this platform
             //if( registrations.HasFlag( TargetRegistration.TargetInfo ) )
-            //    LLVMInitializeNativeTargetInfo( );
+            //    LLVMInitializeNativeTargetInfoExport( );
 
             //if( registrations.HasFlag( TargetRegistration.TargetMachine ) )
-            //    LLVMInitializeNativeTargetMC( );
+            //    LLVMInitializeNativeTargetMCExport( );
             */
 
             if( registrations.HasFlag( TargetRegistrations.AsmPrinter ) )
             {
-                LLVMInitializeNativeAsmPrinter( );
+                LLVMInitializeNativeAsmPrinterExport( );
             }
 
             if( registrations.HasFlag( TargetRegistrations.Disassembler ) )
             {
-                LLVMInitializeNativeDisassembler( );
+                LLVMInitializeNativeDisassemblerExport( );
             }
 
             if( registrations.HasFlag( TargetRegistrations.AsmParser ) )
             {
-                LLVMInitializeNativeAsmParser( );
+                LLVMInitializeNativeAsmParserExport( );
             }
         }
 
