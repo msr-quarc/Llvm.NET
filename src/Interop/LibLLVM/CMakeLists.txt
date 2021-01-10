@@ -213,8 +213,8 @@ endif()
 
 if (APPLE)
     target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z")
-elseif (UNIX)
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "tinfo")
+#elseif (UNIX)
+#    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "tinfo")
 endif()
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
