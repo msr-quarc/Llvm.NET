@@ -10,6 +10,7 @@ try
 
     if ($buildInfo['Platform'] -eq [platform]::Linux) {
         dotnet build 'src\Interop\InteropTests'
+        ldd -r ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
         nm -u ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
     }
 
