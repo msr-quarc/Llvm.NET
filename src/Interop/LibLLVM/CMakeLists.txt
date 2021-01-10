@@ -44,7 +44,6 @@ endif()
 
 target_sources(Ubiquity.NET.LibLlvm PUBLIC 
     "InlinedExports"
-    "IncludeEverything"
     "EXPORTS.g.DEF")
 
 target_sources(Ubiquity.NET.LibLlvm PRIVATE 
