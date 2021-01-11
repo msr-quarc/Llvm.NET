@@ -12,6 +12,7 @@ try
         dotnet build 'src\Interop\InteropTests'
         ldd -r ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
         nm -u ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
+        $env:LD_DEBUG = "all"
     }
 
     Write-Information 'Running Interop tests as x64'
@@ -39,6 +40,7 @@ try
 }
 catch
 {
+    $env:LD_DEBUG = $null
     Write-Host "##vso[task.logissue type=error;]Invoke-UnitTests.ps1 failed: $($_.Exception.Message)"
     Write-Error $_.Exception.Message
 }
