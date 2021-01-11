@@ -214,15 +214,10 @@ target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE
     )
 
 if (APPLE)
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z" "edit" "xml2")
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z" "edit" "xml2" "ncurses" "pthread" "dl")
 elseif (UNIX)
     target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-Wl,--no-whole-archive")
 endif()
-
-if (NOT WIN32)
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "ncurses" "pthread" "dl")
-endif()
-
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
