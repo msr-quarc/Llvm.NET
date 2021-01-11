@@ -214,7 +214,7 @@ target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE
     )
 
 if (APPLE)
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z" "edit" "xml")
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z" "edit" "xml2")
 elseif (UNIX)
     target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-Wl,--no-whole-archive")
 endif()
