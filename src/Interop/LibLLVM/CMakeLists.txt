@@ -61,7 +61,7 @@ target_sources(Ubiquity.NET.LibLlvm PRIVATE
     "ValueBindings")
 
 if (NOT WIN32)
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-Wl,--wholve-archive")
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-Wl,--whole-archive")
 endif()
 
 target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE
@@ -212,7 +212,7 @@ target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE
     )
 
 if (NOT WIN32)
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-Wl,--no-wholve-archive" "ncurses" "pthread")
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-Wl,--no-whole-archive" "ncurses" "pthread")
 endif()
 
 if (APPLE)
