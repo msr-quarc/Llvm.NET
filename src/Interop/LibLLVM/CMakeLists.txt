@@ -220,7 +220,7 @@ elseif (UNIX)
 endif()
 
 if (NOT WIN32)
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "ncurses" "pthread")
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "ncurses" "pthread" "dl")
 endif()
 
 
