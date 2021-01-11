@@ -60,7 +60,9 @@ target_sources(Ubiquity.NET.LibLlvm PRIVATE
     "TripleBindings" 
     "ValueBindings")
 
-if (NOT WIN32)
+if (APPLE)
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-Wl,-all_load")
+elseif (UNIX)
     target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-Wl,--whole-archive")
 endif()
 
@@ -211,15 +213,16 @@ target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE
         "LLVMXRay"
     )
 
-if (NOT WIN32)
-    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-Wl,--no-whole-archive" "ncurses" "pthread")
-endif()
-
 if (APPLE)
     target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "z")
-#elseif (UNIX)
-#    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "tinfo")
+elseif (UNIX)
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "-Wl,--no-whole-archive")
 endif()
+
+if (NOT WIN32)
+    target_link_libraries(Ubiquity.NET.LibLlvm PRIVATE "ncurses" "pthread")
+endif()
+
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
