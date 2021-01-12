@@ -39,7 +39,7 @@ stages:
   jobs:
   - job: Build
     pool: 
-      vmImage: 'ubuntu-latest'
+      vmImage: 'ubuntu-20.04'
 
     timeoutInMinutes: 240
 
@@ -124,7 +124,7 @@ stages:
     strategy:
       matrix:
         linux:
-          imageName: 'ubuntu-latest'
+          imageName: 'ubuntu-20.04'
         osx:
           imageName: 'macOs-latest'
         windows:
