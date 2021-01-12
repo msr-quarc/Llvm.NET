@@ -12,7 +12,8 @@ try
         dotnet build 'src/Interop/InteropTests'
     #     ldd -r ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
     #     nm -u ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
-        $env:LD_DEBUG = "all"
+        # $env:LD_DEBUG = "all"
+        Get-ChildItem -Recurse /usr/share/dotnet/host/fxr
     }
 
     Write-Information 'Running Interop tests as x64'
