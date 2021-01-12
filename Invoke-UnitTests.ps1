@@ -15,7 +15,8 @@ try
     #     $env:LD_DEBUG = "all"
     # }
 
-    dotnet --version
+    Write-Information "Dotnt sdks:"
+    dotnet --list-sdks
 
     Write-Information 'Running Interop tests as x64'
     Invoke-DotNetTest $buildInfo 'src\Interop\InteropTests\InteropTests.csproj' $env:BUILD_CONFIG
