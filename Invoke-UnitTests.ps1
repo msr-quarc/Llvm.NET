@@ -14,7 +14,7 @@ try
         nm -u ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
         # $env:LD_DEBUG = "all"
         ./Build-Xplat.ps1
-        Copy-Item -Force ./xplat/linux-x64/libUbiquity.NET.LibLlvm.so ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
+        Copy-Item -verbose -Force ./xplat/linux-x64/libUbiquity.NET.LibLlvm.so ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
         dotnet test src/Interop/InteropTests --no-build
     }
 
