@@ -8,15 +8,12 @@ try
         return
     }
 
-    # if ($buildInfo['Platform'] -eq [platform]::Linux) {
-    #     dotnet build 'src/Interop/InteropTests'
-    #     ldd -r ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
-    #     nm -u ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
-    #     # $env:LD_DEBUG = "all"
-    #     ./Build-Xplat.ps1
-    #     Copy-Item -verbose -Force ./xplat/linux-x64/libUbiquity.NET.LibLlvm.so ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
-    #     dotnet test src/Interop/InteropTests --no-build
-    # }
+    if ($buildInfo['Platform'] -eq [platform]::Linux) {
+        dotnet build 'src/Interop/InteropTests'
+        ldd -r ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
+        nm -u ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
+        $env:LD_DEBUG = "all"
+    }
 
     Write-Information 'Running Interop tests as x64'
     Invoke-DotNetTest $buildInfo 'src\Interop\InteropTests\InteropTests.csproj' $env:BUILD_CONFIG
