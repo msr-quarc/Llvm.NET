@@ -550,8 +550,9 @@ function Invoke-DotNetTest($buildInfo, $projectRelativePath, $configuration)
     }
     $testProj = Join-Path $buildInfo['RepoRootPath'] $projectRelativePath
     $runSettings = Join-Path $buildInfo['SrcRootPath'] 'x64.runsettings'
-    dotnet test $testProj -v m -s $runSettings --logger trx -c $configuration
+    dotnet test $testProj -v m -s $runSettings --logger trx -c $configuration --blame
     if ($LASTEXITCODE -ne 0) {
+        Get-ChildItem "./*Sequence.xml*" | %{write-information $_.fullname ; Get-Content $_ ; write-information "__END__"}
         throw "'dotnet test $testproj' exited with code: $LASTEXITCODE"
     }
 }
