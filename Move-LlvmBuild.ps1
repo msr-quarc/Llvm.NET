@@ -66,7 +66,7 @@ function Move-Tree ([string]$source, [string]$dest, [string[]]$filter = @("*"), 
 
 Write-Information "Moving LLVM build outputs to the expected location"
 
-. $PSScriptRoot\buildutils.ps1
+. $PSScriptRoot/buildutils.ps1
 $buildInfo = Initialize-BuildEnvironment
 if ($buildInfo['Platform'] -eq [platform]::Windows) {
     $plat = "win32"

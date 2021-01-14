@@ -2,7 +2,7 @@ Push-Location $PSScriptRoot
 $oldPath = $env:Path
 try
 {
-    . .\buildutils.ps1
+    . ./buildutils.ps1
     $buildInfo = Initialize-BuildEnvironment
 
     if ($env:OUTPUT_LLVM -eq "true") {
@@ -10,9 +10,9 @@ try
         return
     }
 
-    .\Build-Interop.ps1 -Configuration $env:BUILD_CONFIG
+    ./Build-Interop.ps1 -Configuration $env:BUILD_CONFIG
 
-    .\Build-DotNet.ps1 -Configuration $env:BUILD_CONFIG
+    ./Build-DotNet.ps1 -Configuration $env:BUILD_CONFIG
 }
 catch
 {

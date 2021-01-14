@@ -244,7 +244,7 @@ function Invoke-NuGet
     This will attempt to find Nuget on the current path, and if not found will download the latest
     version from NuGet.org before running the command.
 #>
-    $buildPaths = Get-DefaultBuildPaths ([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..')))
+    $buildPaths = Get-DefaultBuildPaths ([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..' '..')))
     $NuGetPaths = Find-OnPath nuget -ErrorAction Continue
     if( !$NuGetPaths )
     {

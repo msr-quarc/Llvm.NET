@@ -1,5 +1,5 @@
 # Helpers for cmake builds
-using module 'PsModules\CommonBuild\CommonBuild.psd1'
+using module 'PsModules/CommonBuild/CommonBuild.psd1'
 
 Param(
     [string]$Configuration="Release",
@@ -71,14 +71,14 @@ Push-Location $PSScriptRoot
 $oldPath = $env:Path
 try
 {
-    . .\buildutils.ps1
+    . ./buildutils.ps1
 
     $plat = Get-Platform
     if ($plat -eq [Platform]::Windows) {
-        .\Repair-WinBuild.ps1
+        ./Repair-WinBuild.ps1
     }
 
-    cd llvm-project\llvm
+    cd llvm-project/llvm
     Invoke-Build 
 }
 catch

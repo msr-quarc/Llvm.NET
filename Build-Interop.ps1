@@ -43,7 +43,7 @@ pushd $PSScriptRoot
 $oldPath = $env:Path
 try
 {
-    . .\buildutils.ps1
+    . ./buildutils.ps1
     $buildInfo = Initialize-BuildEnvironment
 
     # Download and unpack the LLVM libs if not already present, this doesn't use NuGet as the NuGet compression

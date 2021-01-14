@@ -7,7 +7,7 @@ Push-Location $PSScriptRoot
 $oldPath = $env:Path
 try
 {
-    . .\buildutils.ps1
+    . ./buildutils.ps1
     $buildInfo = Initialize-BuildEnvironment
 
     $msBuildProperties = @{ Configuration = $Configuration
@@ -16,7 +16,7 @@ try
 
     $buildLogPath = Join-Path $buildInfo['BinLogsPath'] Ubiquity.NET.Llvm.binlog
     Write-Information "Building Ubiquity.NET.Llvm"
-    Invoke-MSBuild -Targets 'Restore;Build' -Project src\Ubiquity.NET.Llvm.sln -Properties $msBuildProperties -LoggerArgs ($buildInfo['MsBuildLoggerArgs'] + @("/bl:$buildLogPath") )
+    Invoke-MSBuild -Targets 'Restore;Build' -Project src/Ubiquity.NET.Llvm.sln -Properties $msBuildProperties -LoggerArgs ($buildInfo['MsBuildLoggerArgs'] + @("/bl:$buildLogPath") )
 }
 catch
 {
