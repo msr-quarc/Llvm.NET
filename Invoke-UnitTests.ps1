@@ -14,7 +14,7 @@ try
         # nm -u ./BuildOutput/bin/InteropTests/Release/netcoreapp3.1/runtimes/linux-x64/native/libUbiquity.NET.LibLlvm.so
         # $env:LD_DEBUG = "all"
         # Get-ChildItem -Recurse /usr/share/dotnet/host/fxr
-        apt-get install llvm-10*
+        sudo apt-get install llvm-10*
     }
 
     Write-Information 'Running Interop tests as x64'
