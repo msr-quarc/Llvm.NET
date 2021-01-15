@@ -83,7 +83,7 @@ namespace Ubiquity.NET.Llvm.Tests
             using var obj = llvmContext.OpenBinary( TestObjFileName );
         }
 
-        [Ignore]
+        [Ignore("Openning binaries doesn't work")]
         [TestMethod]
         [Description( "All the declared section names should exist" )]
         public void DeclaredSectionsTest( )

@@ -16,37 +16,37 @@ extern "C" {
     /** LLVMInitializeAllTargetInfos - The main program should call this function if
     it wants access to all available targets that LLVM is configured to
     support. */
-    void LLVMInitializeAllTargetInfosEx( void );
+    void LLVMInitializeAllTargetInfosExport( void );
 
     /** LLVMInitializeAllTargets - The main program should call this function if it
     wants to link in all available targets that LLVM is configured to
     support. */
-    void LLVMInitializeAllTargetsEx( void );
+    void LLVMInitializeAllTargetsExport( void );
 
     /** LLVMInitializeAllTargetMCs - The main program should call this function if
     it wants access to all available target MC that LLVM is configured to
     support. */
-    void LLVMInitializeAllTargetMCsEx( void );
+    void LLVMInitializeAllTargetMCsExport( void );
 
     /** LLVMInitializeAllAsmPrinters - The main program should call this function if
     it wants all asm printers that LLVM is configured to support, to make them
     available via the TargetRegistry. */
-    void LLVMInitializeAllAsmPrintersEx( void );
+    void LLVMInitializeAllAsmPrintersExport( void );
 
     /** LLVMInitializeAllAsmParsers - The main program should call this function if
     it wants all asm parsers that LLVM is configured to support, to make them
     available via the TargetRegistry. */
-    void LLVMInitializeAllAsmParsersEx( void );
+    void LLVMInitializeAllAsmParsersExport( void );
 
     /** LLVMInitializeAllDisassemblers - The main program should call this function
     if it wants all disassemblers that LLVM is configured to support, to make
     them available via the TargetRegistry. */
-    void LLVMInitializeAllDisassemblersEx( void );
+    void LLVMInitializeAllDisassemblersExport( void );
 
-    LLVMBool LLVMInitializeNativeTargetEx(void);
-    LLVMBool LLVMInitializeNativeAsmParserEx(void);
-    LLVMBool LLVMInitializeNativeAsmPrinterEx(void);
-    LLVMBool LLVMInitializeNativeDisassemblerEx(void);
+    LLVMBool LLVMInitializeNativeTargetExport(void);
+    LLVMBool LLVMInitializeNativeAsmParserExport(void);
+    LLVMBool LLVMInitializeNativeAsmPrinterExport(void);
+    LLVMBool LLVMInitializeNativeDisassemblerExport(void);
 #ifdef __cplusplus
 }
 #endif
