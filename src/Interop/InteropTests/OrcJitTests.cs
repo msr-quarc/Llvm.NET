@@ -24,7 +24,6 @@ namespace InteropTests
     [TestClass]
     public class OrcJitTests
     {
-        [Ignore("Orc JIT unreliable")]
         [TestMethod]
         public void TestLazyIRCompilation( )
         {
