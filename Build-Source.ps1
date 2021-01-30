@@ -7,6 +7,8 @@ Push-Location $PSScriptRoot
 $oldPath = $env:Path
 try
 {
+    ./Build-ArgVal.ps1 -AllowVsPreReleases:$AllowVsPreReleases -Configuration $Configuration
+
     ./Build-Interop.ps1 -AllowVsPreReleases:$AllowVsPreReleases -Configuration $Configuration
 
     ./Build-DotNet.ps1 -Configuration $Configuration

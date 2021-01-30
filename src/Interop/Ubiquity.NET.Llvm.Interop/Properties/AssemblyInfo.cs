@@ -14,4 +14,4 @@ using System.Runtime.InteropServices;
 
 [assembly: NeutralResourcesLanguage( "en" )]
 
-[assembly:AssemblyKeyFileAttribute("..\\..\\..\\msr-quarc.Llvm.NET.snk")]
+[assembly:AssemblyKeyFileAttribute("../../../msr-quarc.Llvm.NET.snk")]

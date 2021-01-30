@@ -16,7 +16,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="CommandLineParser" />
-        <PackageReference Include="Ubiquity.ArgValidators" />
+        <PackageReference Include="Ubiquity.ArgValidators" VersionOverride="6.0.1" />
         <PackageReference Include="CppSharp" />
         <PackageReference Include="YamlDotNet" />
     </ItemGroup>
