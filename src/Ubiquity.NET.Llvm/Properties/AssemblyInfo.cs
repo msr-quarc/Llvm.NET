@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
@@ -14,3 +15,5 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible( false )]
 
 [assembly: NeutralResourcesLanguage( "en" )]
+
+[assembly:AssemblyKeyFileAttribute("..\\..\\msr-quarc.Llvm.NET.snk")]
