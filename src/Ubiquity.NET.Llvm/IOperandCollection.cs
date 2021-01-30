@@ -32,4 +32,25 @@ namespace Ubiquity.NET.Llvm
         /// <returns><see langword="true"/> if the item is found</returns>
         bool Contains( T item );
     }
+
+    /// <summary>Extensions to allow slicing of IOperandCollection</summary>
+    public static class IOperandCollectionExtension
+    {
+        /// <summary>Creates a slice of the collection</summary>
+        /// <param name="self">Extension this</param>
+        /// <param name="start">Inclusive start index for the slice</param>
+        /// <param name="end">Exclusive end index for the slice</param>
+        /// <typeparam name="T">Type of elements in the container</typeparam>
+        /// <returns>Slice of the collection</returns>
+        [SuppressMessage( "Naming", "CA1716:Identifiers should not match keywords", Justification = "Naming is consistent with System.Range parameters" )]
+        public static IOperandCollection<T> Slice<T>( this IOperandCollection<T> self, int start, int end )
+        {
+            if (self == null)
+            {
+                throw new ArgumentNullException(nameof(self));
+            }
+
+            return new OperandCollectionSlice<T>( self, new Range( start, end ) );
+        }
+    }
 }
